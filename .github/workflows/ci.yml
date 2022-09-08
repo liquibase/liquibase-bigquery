@@ -99,7 +99,7 @@ jobs:
             **/target/jacoco.exec
 
 #  integration-test:
-#    name: Test Harness for Redshift ${{ matrix.bigquery }}
+#    name: Test Harness for BigQuery ${{ matrix.bigquery }}
 #    needs: build
 #    runs-on: ubuntu-latest
 #
