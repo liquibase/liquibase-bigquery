@@ -169,7 +169,7 @@
                 <configuration>
                     <attach>true</attach>
                     <author>false</author>
-                    <doctitle>Liquibase BigQuery ${version} API</doctitle>
+                    <doctitle>Liquibase BigQuery ${project.version} API</doctitle>
                     <quiet>true</quiet>
                     <doclint>none</doclint>
                     <encoding>UTF-8</encoding>
