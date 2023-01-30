@@ -1,6 +1,6 @@
 package liquibase.ext.bigquery
 
-import liquibase.harness.BaseHarnessSuite
+import liquibase.harness.AdvancedHarnessSuite
 
-class LiquibaseHarnessSuiteIT extends BaseHarnessSuite {
+class LiquibaseHarnessSuiteIT extends AdvancedHarnessSuite {
 }
