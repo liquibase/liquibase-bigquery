@@ -10,11 +10,6 @@ jobs:
   setup:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        liquibase-support-level: [Contributed, Foundational, Advanced] # Define the different test levels to run
-      fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
-
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -63,6 +58,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     needs: [setup]
+    strategy:
+      matrix:
+        liquibase-support-level: [ Contributed, Foundational, Advanced ] # Define the different test levels to run
+      fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
 
     permissions:
       contents: 'read'
