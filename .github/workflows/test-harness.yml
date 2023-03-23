@@ -10,6 +10,11 @@ jobs:
   setup:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        liquibase-support-level: [ Contributed, Foundational, Advanced ] # Define the different test levels to run
+      fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
+
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -36,7 +41,7 @@ jobs:
           tf_actions_version: 1.1.7
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: src/test/resources/terraform
-          args: '-backend-config=./backend/gh.conf -upgrade'
+          args: '-backend-config=./backend/gh.conf -backend-config="prefix=${{ matrix.liquibase-support-level }}" -upgrade'
 
       - name: "Terraform Validate"
         id: terraform_validate
@@ -53,7 +58,7 @@ jobs:
           tf_actions_version: 1.1.7
           tf_actions_subcommand: 'apply'
           tf_actions_working_dir: src/test/resources/terraform
-          args: '-var-file=gh.tfvars'
+          args: '-var-file=gh.tfvars -var="env=${{ matrix.liquibase-support-level }}'
 
   test:
     runs-on: ubuntu-latest
@@ -83,7 +88,7 @@ jobs:
         continue-on-error: true # Continue to run the action even if the previous steps fail
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
-        run: mvn -ntp -Dtest=${{ matrix.liquibase-support-level }}ExtensionHarnessSuite test # Run the Liquibase test harness at each test level
+        run: mvn -ntp -Dtest=${{ matrix.liquibase-support-level }}ExtensionHarnessSuite -DconfigFile=harness-config-${{ matrix.liquibase-support-level }}.yml test # Run the Liquibase test harness at each test level
 
       - name: Test Reporter # Generate a test report using the Test Reporter action
         uses: dorny/test-reporter@v1.6.0
@@ -142,7 +147,7 @@ jobs:
           tf_actions_version: 1.1.7
           tf_actions_subcommand: 'init'
           tf_actions_working_dir: src/test/resources/terraform
-          args: '-backend-config=./backend/gh.conf  -upgrade'
+          args: '-backend-config=./backend/gh.conf -backend-config="prefix=${{ matrix.liquibase-support-level }}" -upgrade'
 
       - name: "Terraform Destroy"
         id: terraform_destroy
@@ -151,4 +156,4 @@ jobs:
           tf_actions_version: 1.1.7
           tf_actions_subcommand: 'destroy'
           tf_actions_working_dir: src/test/resources/terraform
-          args: '-auto-approve -var-file=gh.tfvars'
+          args: '-auto-approve -var-file=gh.tfvars -var="env=${{ matrix.liquibase-support-level }}"'

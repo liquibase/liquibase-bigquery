@@ -7,3 +7,8 @@ variable "deployer_sa" {
   description = "Deployer service account"
   type        = string
 }
+
+variable "env" {
+  description = "Test level"
+  type        = string
+}
