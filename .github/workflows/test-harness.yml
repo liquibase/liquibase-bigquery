@@ -88,7 +88,6 @@ jobs:
             create_credentials_file: 'true'
 
       - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
-        continue-on-error: true # Don't mark this step as failed, the test-reporter will if tests failed
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
         run: mvn -ntp -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT -DconfigFile=/harness-config-${{ matrix.liquibase-support-level }}.yml test # Run the Liquibase test harness at each test level
