@@ -116,6 +116,12 @@ jobs:
   destroy:
     runs-on: ubuntu-latest
     needs: [setup,test]
+    strategy:
+      matrix:
+        liquibase-support-level: [ Contributed, Foundational, Advanced ] # Define the different test levels to run
+      fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
+    
+
     defaults:
       run:
         working-directory: src/test/resources/terraform
