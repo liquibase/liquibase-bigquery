@@ -114,6 +114,7 @@ jobs:
         if: always()
 
   destroy:
+    continue-on-error: true # Continue to run destroy to cleanup even if previous jobs fail due to failed tests
     runs-on: ubuntu-latest
     needs: [setup,test]
     strategy:
