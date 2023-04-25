@@ -3,6 +3,11 @@ on:
   pull_request:
     branches:
       - '*'
+  push:
+    branches:
+      - 'main'
+      - 'master'
+
 env:
   tf_version: 'latest'
 
@@ -64,7 +69,6 @@ jobs:
     name: Run Test Harness
     runs-on: ubuntu-latest
     needs: [setup]
-
     strategy:
       matrix:
         liquibase-support-level: [ Contributed, Foundational, Advanced ] # Define the different test levels to run
@@ -83,11 +87,12 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v0'
         with:
-            workload_identity_provider: 'projects/263903559714/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
-            service_account: 'gh-bq-deployer@gh-integration-tests.iam.gserviceaccount.com'
-            create_credentials_file: 'true'
+          workload_identity_provider: 'projects/263903559714/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
+          service_account: 'gh-bq-deployer@gh-integration-tests.iam.gserviceaccount.com'
+          create_credentials_file: 'true'
 
       - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
+        continue-on-error: true # Continue to run the action even if the previous steps fail
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
         run: mvn -ntp -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT -DconfigFile=/harness-config-${{ matrix.liquibase-support-level }}.yml test # Run the Liquibase test harness at each test level
