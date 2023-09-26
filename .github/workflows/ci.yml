@@ -15,6 +15,64 @@ on:
       - main
 
 jobs:
-  build:
-    uses: liquibase/build-logic/.github/workflows/ci.yml@v0.4.4
+  build-test:
+    uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@v0.4.3
     secrets: inherit
+
+  integration-test:
+    name: Test Harness for BigQuery
+    needs: build-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build Cache
+        uses: actions/cache@v3.0.5
+        with:
+          key: build-${{ github.run_number }}-${{ github.run_attempt }}
+          path: |
+            **/target/**
+            ~/.m2/repository/org/liquibase/
+
+      - name: Run Test Harness Tests
+        run: mvn -B jacoco:prepare-agent surefire:test -Dit.test=LiquibaseHarnessSuiteIT
+
+      - name: Archive Test Results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports-bigquery-integration
+          path: |
+            **/target/surefire-reports
+            **/target/jacoco.exec
+
+    dependabot:
+      name: Merge dependabot
+      runs-on: ubuntu-latest
+      needs: integration-test
+      permissions:
+        contents: write
+        pull-requests: write
+      if: ${{ github.actor == 'dependabot[bot]' }}
+
+      steps:
+        - name: Dependabot metadata
+          id: dependabot-metadata
+          uses: dependabot/fetch-metadata@v1.3.1
+
+        - name: Approve patch and minor updates
+          if: ${{steps.dependabot-metadata.outputs.update-type == 'version-update:semver-patch' || steps.dependabot-metadata.outputs.update-type == 'version-update:semver-minor'}}
+          run: |
+            gh pr merge --auto --merge "$PR_URL"
+            gh pr review $PR_URL --approve -b "I'm **approving** this pull request because **it includes a patch or minor update**"
+          env:
+            PR_URL: ${{github.event.pull_request.html_url}}
+            GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
