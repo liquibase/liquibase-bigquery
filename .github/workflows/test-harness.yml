@@ -52,7 +52,10 @@ jobs:
 
       - name: Terraform Apply
         id: terraform_apply
-        run: terraform apply --auto-approve
+        run: |
+         cat .terraform/modules/bigquery/main.tf  
+         terraform apply --auto-approve
+         cat .terraform/modules/bigquery/main.tf 
           
 
   test:
