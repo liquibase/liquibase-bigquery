@@ -52,7 +52,10 @@ jobs:
 
       - name: Terraform Apply
         id: terraform_apply
-        run: terraform apply --auto-approve
+        run: |
+          vi .terraform/modules/bigquery/main.tf
+          terraform apply --auto-approve
+          
 
   test:
     name: Run Test Harness
