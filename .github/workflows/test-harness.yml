@@ -13,11 +13,12 @@ env:
 jobs:
   setup:
     runs-on: ubuntu-latest
-
     permissions:
       contents: 'read'
       id-token: 'write'
-
+    defaults:
+      run:
+        working-directory: src/test/resources/terraform
     steps:
       - uses: actions/checkout@v4
 
@@ -31,31 +32,23 @@ jobs:
         id: config_project
         run: gcloud config set project testharnesstests
 
-      - name: "Terraform Init"
+      - name: Terraform Format
+        if: ${{ github.event_name == 'pull_request' }}
+        id: terraform_fmt
+        run: terraform fmt
+
+      - name: Terraform Init
         id: terraform_init
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 1.1.7
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: src/test/resources/terraform
-          args: '-backend-config=./backend/gh.conf -upgrade'
+        run: terraform init
 
-      - name: "Terraform Validate"
+      - name: Terraform Validate
+        if: ${{ github.event_name == 'pull_request' }}
         id: terraform_validate
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 1.1.7
-          tf_actions_subcommand: 'validate'
-          tf_actions_working_dir: src/test/resources/terraform
+        run: terraform validate -no-color
 
-      - name: "Terraform Apply"
-        uses: hashicorp/terraform-github-actions@master
+      - name: Terraform Apply
         id: terraform_apply
-        with:
-          tf_actions_version: 1.1.7
-          tf_actions_subcommand: 'apply'
-          tf_actions_working_dir: src/test/resources/terraform
-          args: '-var-file=gh.tfvars'
+        run: terraform apply
 
   test:
     name: Run Test Harness
@@ -77,11 +70,9 @@ jobs:
 
       - name: configure auth
         id: auth
-        uses: 'google-github-actions/auth@v0'
+        uses: 'google-github-actions/auth@v2'
         with:
-            workload_identity_provider: 'projects/263903559714/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
-            service_account: 'gh-bq-deployer@gh-integration-tests.iam.gserviceaccount.com'
-            create_credentials_file: 'true'
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
         continue-on-error: true # Continue to run the action even if the previous steps fail
@@ -126,12 +117,9 @@ jobs:
 
       - name: configure auth
         id: auth
-        uses: 'google-github-actions/auth@v0'
+        uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/263903559714/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
-          service_account: 'gh-bq-deployer@gh-integration-tests.iam.gserviceaccount.com'
-          token_format: 'access_token'
-          create_credentials_file: 'true'
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: set GCP project
         id: config_project
