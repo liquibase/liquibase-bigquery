@@ -35,7 +35,9 @@ jobs:
       - name: Terraform Format
         if: ${{ github.event_name == 'pull_request' }}
         id: terraform_fmt
-        run: terraform fmt
+        run: |
+         terraform fmt
+         terraform init -reconfigure
 
       - name: Terraform Init
         id: terraform_init
