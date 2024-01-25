@@ -16,6 +16,8 @@ jobs:
     permissions:
       contents: 'read'
       id-token: 'write'
+    env:
+     GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
     defaults:
       run:
         working-directory: src/test/resources/terraform
