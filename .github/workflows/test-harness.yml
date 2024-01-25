@@ -20,19 +20,18 @@ jobs:
       id-token: 'write'
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: configure auth
         id: auth
-        uses: 'google-github-actions/auth@v0'
+        uses: 'google-github-actions/auth@v2'
         with:
-          workload_identity_provider: 'projects/263903559714/locations/global/workloadIdentityPools/github-identity-pool/providers/github-identity-provider'
-          service_account: 'gh-bq-deployer@gh-integration-tests.iam.gserviceaccount.com'
-          create_credentials_file: 'true'
+          project_id: 'testharnesstests'
+          workload_identity_provider: 'projects/175312954943/locations/global/workloadIdentityPools/testharness-identity-pool/providers/github-identity-provider'
 
       - name: set GCP project
         id: config_project
-        run: gcloud config set project gh-integration-tests
+        run: gcloud config set project testharnesstests
 
       - name: "Terraform Init"
         id: terraform_init
