@@ -7,7 +7,6 @@ on:
     branches:
       - 'main'
       - 'master'
-
 env:
   tf_version: 'latest'
 
@@ -27,6 +26,7 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           project_id: 'testharnesstests'
+          service_account: 'gh-bq-deployer@testharnesstests.iam.gserviceaccount.com'
           workload_identity_provider: 'projects/175312954943/locations/global/workloadIdentityPools/testharness-identity-pool/providers/github-identity-provider'
 
       - name: set GCP project
