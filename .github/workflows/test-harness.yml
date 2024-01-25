@@ -25,9 +25,7 @@ jobs:
         id: auth
         uses: 'google-github-actions/auth@v2'
         with:
-          project_id: 'testharnesstests'
-          service_account: 'gh-bq-deployer@testharnesstests.iam.gserviceaccount.com'
-          workload_identity_provider: 'projects/175312954943/locations/global/workloadIdentityPools/testharness-identity-pool/providers/github-identity-provider'
+          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
 
       - name: set GCP project
         id: config_project
