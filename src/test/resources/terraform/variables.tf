@@ -6,6 +6,6 @@ variable "project_id" {
 
 variable "deployer_sa" {
   description = "Deployer service account"
-  default     = "gh-bq-deployer"
+  default     = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
   type        = string
 }
