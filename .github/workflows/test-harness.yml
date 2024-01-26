@@ -65,45 +65,7 @@ jobs:
         liquibase-support-level: [Foundational ] # Define the different test levels to run
       fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
     env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      REPOSITORIES: |
-        [
-          {
-            "id": "liquibase",
-            "url": "https://maven.pkg.github.com/liquibase/liquibase",
-            "releases": {
-              "enabled": "false"
-            },
-            "snapshots": {
-              "enabled": "true",
-              "updatePolicy": "always"
-            }
-          },
-          {
-            "id": "liquibase-pro",
-            "url": "https://maven.pkg.github.com/liquibase/liquibase-pro",
-            "releases": {
-              "enabled": "false"
-            },
-            "snapshots": {
-              "enabled": "true",
-              "updatePolicy": "always"
-            }
-          }
-        ]
-        SERVERS: |
-        [
-          {
-            "id": "liquibase-pro",
-            "username": "liquibot",
-            "password": "${{ secrets.LIQUIBOT_PAT }}"
-          },
-          {
-            "id": "liquibase",
-            "username": "liquibot",
-            "password": "${{ secrets.LIQUIBOT_PAT }}"
-          }
-        ]
+      github-token: ${{ secrets.LIQUIBOT_PAT_GPM_ACCESS }}
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -112,6 +74,49 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+        #look for dependencies in maven
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v21
+        with:
+          repositories: |
+            [
+              {
+                "id": "liquibase",
+                "url": "https://maven.pkg.github.com/liquibase/liquibase",
+                "releases": {
+                  "enabled": "false"
+                },
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always"
+                }
+              },
+              {
+                "id": "liquibase-pro",
+                "url": "https://maven.pkg.github.com/liquibase/liquibase-pro",
+                "releases": {
+                  "enabled": "false"
+                },
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always"
+                }
+              }
+            ]
+          servers: |
+            [
+              {
+                "id": "liquibase-pro",
+                "username": "liquibot",
+                "password": "${{ secrets.LIQUIBOT_PAT }}"
+              },
+              {
+                "id": "liquibase",
+                "username": "liquibot",
+                "password": "${{ secrets.LIQUIBOT_PAT }}"
+              }
+            ]
 
       - name: configure auth
         id: auth
