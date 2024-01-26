@@ -66,6 +66,44 @@ jobs:
       fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPOSITORIES: |
+        [
+          {
+            "id": "liquibase",
+            "url": "https://maven.pkg.github.com/liquibase/liquibase",
+            "releases": {
+              "enabled": "false"
+            },
+            "snapshots": {
+              "enabled": "true",
+              "updatePolicy": "always"
+            }
+          },
+          {
+            "id": "liquibase-pro",
+            "url": "https://maven.pkg.github.com/liquibase/liquibase-pro",
+            "releases": {
+              "enabled": "false"
+            },
+            "snapshots": {
+              "enabled": "true",
+              "updatePolicy": "always"
+            }
+          }
+        ]
+        SERVERS: |
+        [
+          {
+            "id": "liquibase-pro",
+            "username": "liquibot",
+            "password": "${{ secrets.LIQUIBOT_PAT }}"
+          },
+          {
+            "id": "liquibase",
+            "username": "liquibot",
+            "password": "${{ secrets.LIQUIBOT_PAT }}"
+          }
+        ]
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -132,20 +170,10 @@ jobs:
         id: config_project
         run: gcloud config set project gh-integration-tests
 
-      - name: "Terraform Init"
+      - name: Terraform Init
         id: terraform_init
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 1.1.7
-          tf_actions_subcommand: 'init'
-          tf_actions_working_dir: src/test/resources/terraform
-          args: '-backend-config=./backend/gh.conf  -upgrade'
+        run: terraform init -migrate-state -backend-config=./backend/gh.conf -upgrade
 
       - name: "Terraform Destroy"
         id: terraform_destroy
-        uses: hashicorp/terraform-github-actions@master
-        with:
-          tf_actions_version: 1.1.7
-          tf_actions_subcommand: 'destroy'
-          tf_actions_working_dir: src/test/resources/terraform
-          args: '-auto-approve -var-file=gh.tfvars'
+        run: terraform destroy -auto-approve -var-file=gh.tfvars
