@@ -1,3 +1,14 @@
+data "terraform_remote_state" "liquibase-bigquery-testHarnessTests" {
+  backend = "remote"
+  config = {
+    organization = "liquibase"
+    hostname     = "spacelift.io"
+    workspaces = {
+      name = "liquibase-bigquery-testHarnessTests"
+    }
+  }
+}
+
 locals {
   deployer_email = "$var.deployer_sa@$project_id.iam.gserviceaccount.com"
 }
@@ -15,3 +26,5 @@ module "bigquery" {
     project_id = "testharnesstests"
     }
 }
+
+

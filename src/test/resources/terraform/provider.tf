@@ -13,5 +13,10 @@ terraform {
       source  = "integrations/github"
       version = "~> 4.0"
     }
+    spacelift = {
+          source = "spacelift-io/spacelift"
+        }
   }
 }
+
+provider "spacelift" {}

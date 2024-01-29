@@ -18,6 +18,9 @@ jobs:
       id-token: 'write'
     env:
      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+     SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+     SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+     SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
     defaults:
       run:
         working-directory: src/test/resources/terraform
@@ -34,26 +37,35 @@ jobs:
         id: config_project
         run: gcloud config set project testharnesstests
 
+      - name: Install spacectl
+        uses: spacelift-io/setup-spacectl@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Terraform Format
         if: ${{ github.event_name == 'pull_request' }}
         id: terraform_fmt
-        run: |
-         terraform fmt
+        run: terraform fmt
 
       - name: Terraform Init
         id: terraform_init
-        run: terraform init -backend-config=./backend/gh.conf -upgrade
+        run: terraform init -backend-config=./gh.conf -upgrade
 
       - name: Terraform Validate
         if: ${{ github.event_name == 'pull_request' }}
         id: terraform_validate
         run: terraform validate -no-color
 
-      - name: Terraform Apply
-        id: terraform_apply
+      - name: Preview infrastructure
         run: |
-         cat .terraform/modules/bigquery/main.tf  
-         terraform apply --auto-approve -var-file=gh.tfvars       
+          spacectl stack local-preview --id liquibase-bigquery-testHarnessTests > ${GITHUB_WORKSPACE}/plan.out
+          cat ${GITHUB_WORKSPACE}/plan.out
+
+      - name: Deploy infrastructure
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          spacectl stack set-current-commit --id liquibase-bigquery-testHarnessTests --sha ${{ github.sha }}
+          spacectl stack deploy --id liquibase-bigquery-testHarnessTests --auto-confirm -var-file=gh.tfvars 
 
   test:
     name: Run Test Harness
@@ -124,7 +136,6 @@ jobs:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
 
       - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
-        continue-on-error: true # Continue to run the action even if the previous steps fail
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
         run: |
@@ -177,7 +188,7 @@ jobs:
 #
 #      - name: Terraform Init
 #        id: terraform_init
-#        run: terraform init -migrate-state -backend-config=./backend/gh.conf -upgrade
+#        run: terraform init -migrate-state -backend-config=./gh.conf -upgrade
 #
 #      - name: "Terraform Destroy"
 #        id: terraform_destroy
