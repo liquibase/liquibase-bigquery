@@ -39,11 +39,10 @@ jobs:
         id: terraform_fmt
         run: |
          terraform fmt
-         terraform init -reconfigure
 
       - name: Terraform Init
         id: terraform_init
-        run: terraform init -migrate-state -backend-config=./backend/gh.conf -upgrade
+        run: terraform init -backend-config=./backend/gh.conf -upgrade
 
       - name: Terraform Validate
         if: ${{ github.event_name == 'pull_request' }}
