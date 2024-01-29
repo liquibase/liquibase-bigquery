@@ -128,7 +128,7 @@ jobs:
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
         run: |
-          mvn -ntp -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT clean install test # Run the Liquibase test harness at each test level
+          mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
 
       - name: Test Reporter # Generate a test report using the Test Reporter action
         uses: dorny/test-reporter@v1.6.0
