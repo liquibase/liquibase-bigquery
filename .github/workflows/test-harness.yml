@@ -23,6 +23,7 @@ jobs:
      SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
      SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
      SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+     TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_TOKEN }}
     defaults:
       run:
         working-directory: src/test/resources/terraform
