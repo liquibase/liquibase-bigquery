@@ -2,7 +2,7 @@
 terraform {
   backend "remote" {
     organization = "liquibase"
-    hostname     = "app.terraform.io"
+    hostname     = "spacelift.io"
     workspaces {
       name = "liquibase-bigquery-testharness-tests"
     }
