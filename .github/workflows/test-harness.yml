@@ -49,7 +49,7 @@ jobs:
 
       - name: Terraform Init
         id: terraform_init
-        run: terraform init -var-file=./backend/gh.conf -upgrade
+        run: terraform init -var-file=./gh.tfvars
 
       - name: Terraform Validate
         if: ${{ github.event_name == 'pull_request' }}
