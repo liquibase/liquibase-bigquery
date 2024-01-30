@@ -7,6 +7,8 @@ on:
     branches:
       - 'main'
       - 'master'
+    paths:
+      - 'src/test/resources/terraform/**'
 env:
   tf_version: 'latest'
 

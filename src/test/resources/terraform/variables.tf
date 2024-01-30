@@ -9,3 +9,9 @@ variable "deployer_sa" {
   default     = "gh-bq-deployer"
   type        = string
 }
+
+variable "impersonate_service_account" {
+    description = "Impersonate service account"
+    default     = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
+    type        = string
+}
