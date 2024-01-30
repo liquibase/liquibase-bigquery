@@ -52,7 +52,7 @@ jobs:
 
       - name: Terraform Init
         id: terraform_init
-        run: Run terraform init -migrate-state -upgrade
+        run: terraform init -migrate-state -upgrade
 
       - name: Terraform Validate
         if: ${{ github.event_name == 'pull_request' }}
