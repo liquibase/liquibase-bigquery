@@ -52,7 +52,7 @@ jobs:
 
       - name: Terraform Init
         id: terraform_init
-        run: terraform init
+        run: terraform init -reconfigure
 
       - name: Terraform Validate
         if: ${{ github.event_name == 'pull_request' }}
