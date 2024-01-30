@@ -58,14 +58,14 @@ jobs:
 
       - name: Preview infrastructure
         run: |
-          spacectl stack local-preview --id liquibase-bigquery-testHarnessTests > ${GITHUB_WORKSPACE}/plan.out
+          spacectl stack local-preview --id liquibase-bigquery-testharness-tests > ${GITHUB_WORKSPACE}/plan.out
           cat ${GITHUB_WORKSPACE}/plan.out
 
       - name: Deploy infrastructure
         if: ${{ github.event_name == 'push' }}
         run: |
-          spacectl stack set-current-commit --id liquibase-bigquery-testHarnessTests --sha ${{ github.sha }}
-          spacectl stack deploy --id liquibase-bigquery-testHarnessTests --auto-confirm -var-file=gh.tfvars 
+          spacectl stack set-current-commit --id liquibase-bigquery-testharness-tests --sha ${{ github.sha }}
+          spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm -var-file=gh.tfvars 
 
   test:
     name: Run Test Harness
