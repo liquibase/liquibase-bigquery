@@ -169,34 +169,46 @@ jobs:
         if: always()
 
 
-#  destroy:
-#    runs-on: ubuntu-latest
-#    needs: [setup,test]
-#    defaults:
-#      run:
-#        working-directory: src/test/resources/terraform
-#
-#    permissions:
-#      contents: 'read'
-#      id-token: 'write'
-#
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: configure auth
-#        id: auth
-#        uses: 'google-github-actions/auth@v2'
-#        with:
-#          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
-#
-#      - name: set GCP project
-#        id: config_project
-#        run: gcloud config set project gh-integration-tests
-#
-#      - name: Terraform Init
-#        id: terraform_init
-#        run: terraform init -migrate-state -backend-config=./gh.conf -upgrade
-#
-#      - name: "Terraform Destroy"
-#        id: terraform_destroy
-#        run: terraform destroy -auto-approve -var-file=gh.tfvars
+  destroy:
+    runs-on: ubuntu-latest
+    needs: [setup,test]
+    env:
+      GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+      SPACELIFT_API_KEY_ENDPOINT: ${{ secrets.SPACELIFT_API_KEY_ENDPOINT }}
+      SPACELIFT_API_KEY_ID: ${{ secrets.SPACELIFT_API_KEY_ID }}
+      SPACELIFT_API_KEY_SECRET: ${{ secrets.SPACELIFT_API_KEY_SECRET }}
+      TF_TOKEN_spacelift_io: ${{ secrets.SPACELIFT_API_TOKEN }}
+      GOOGLE_IMPERSONATE_SERVICE_ACCOUNT: ${{ secrets.GOOGLE_IMPERSONATE_SERVICE_ACCOUNT }}
+
+    defaults:
+      run:
+        working-directory: src/test/resources/terraform
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: configure auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: set GCP project
+        id: config_project
+        run: gcloud config set project testharnesstests
+
+      - name: Install spacectl
+        uses: spacelift-io/setup-spacectl@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Terraform Init
+        id: terraform_init
+        run: terraform init
+
+      - name: "Terraform Destroy"
+        id: terraform_destroy
+        run: terraform destroy -auto-approve
