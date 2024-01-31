@@ -209,6 +209,6 @@ jobs:
         id: terraform_init
         run: terraform init
 
-      - name: "Terraform Destroy"
+      - name: Terraform Destroy
         id: terraform_destroy
-        run: terraform destroy -auto-approve
+        run: terraform destroy -target=module.bigquery.google_bigquery_dataset.main -auto-approve
