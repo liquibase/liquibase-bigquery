@@ -71,7 +71,7 @@ jobs:
         #if: ${{ github.event_name == 'push' }}
         run: |
           spacectl stack set-current-commit --id liquibase-bigquery-testharness-tests --sha ${{ github.sha }}
-          spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm -var-file=gh.tfvars 
+          spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm 
 
   test:
     name: Run Test Harness
