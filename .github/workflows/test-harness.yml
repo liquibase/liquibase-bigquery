@@ -7,6 +7,7 @@ on:
     branches:
       - 'main'
       - 'master'
+      - 'DAT-16339'
     paths:
       - 'src/test/resources/terraform/**'
 env:
@@ -67,7 +68,7 @@ jobs:
           cat ${GITHUB_WORKSPACE}/plan.out
 
       - name: Deploy infrastructure
-        if: ${{ github.event_name == 'push' }}
+        #if: ${{ github.event_name == 'push' }}
         run: |
           spacectl stack set-current-commit --id liquibase-bigquery-testharness-tests --sha ${{ github.sha }}
           spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm -var-file=gh.tfvars 
