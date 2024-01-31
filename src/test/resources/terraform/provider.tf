@@ -20,6 +20,7 @@ terraform {
 }
 
 provider "google" {
+  alias       = "impersonate_service_account"
   project     = "testharnesstests"
   region      = "us-east1"
   impersonate_service_account = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
