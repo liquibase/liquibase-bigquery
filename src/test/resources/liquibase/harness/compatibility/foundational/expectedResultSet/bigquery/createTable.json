@@ -8,7 +8,7 @@
       "EXECTYPE":"EXECUTED",
       "LABELS":"test_label",
       "FILENAME":"liquibase\/harness\/compatibility\/foundational\/changelogs\/createTable.xml",
-      "MD5SUM":"9:4a083dae8a82228dbf846133a767d880",
+      "MD5SUM":"9:7eb68c7a3994f387134835e99cf27a10",
       "ID":"1",
       "TAG":""
     },
@@ -20,7 +20,7 @@
       "EXECTYPE":"EXECUTED",
       "LABELS":"test_label",
       "FILENAME":"liquibase\/harness\/compatibility\/foundational\/changelogs\/createTable.yml",
-      "MD5SUM":"9:7eb68c7a3994f387134835e99cf27a10",
+      "MD5SUM":"9:b93d6668d8df8115b2b634a585875da6",
       "ID":"1",
       "TAG":""
     },
@@ -32,7 +32,7 @@
       "EXECTYPE":"EXECUTED",
       "LABELS":"test_label",
       "FILENAME":"liquibase\/harness\/compatibility\/foundational\/changelogs\/createTable.json",
-      "MD5SUM":"9:b93d6668d8df8115b2b634a585875da6",
+      "MD5SUM":"9:23305a0f4312264f2bee0e1e23cad5de",
       "ID":"1",
       "TAG":""
     },
