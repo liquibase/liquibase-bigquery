@@ -73,100 +73,100 @@ jobs:
           spacectl stack set-current-commit --id liquibase-bigquery-testharness-tests --sha ${{ github.sha }}
           spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm 
 
-#  test:
-#    name: Run Test Harness
-#    runs-on: ubuntu-latest
-#    needs: [setup]
-#    strategy:
-#      matrix:
-#        liquibase-support-level: [Foundational ] # Define the different test levels to run
-#      fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
-#    env:
-#      github-token: ${{ secrets.LIQUIBOT_PAT_GPM_ACCESS }}
-#    permissions:
-#      contents: 'read'
-#      id-token: 'write'
-#      checks: write
-#
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#
-#        #look for dependencies in maven
-#      - name: maven-settings-xml-action
-#        uses: whelk-io/maven-settings-xml-action@v21
-#        with:
-#          repositories: |
-#            [
-#              {
-#                "id": "liquibase",
-#                "url": "https://maven.pkg.github.com/liquibase/liquibase",
-#                "releases": {
-#                  "enabled": "false"
-#                },
-#                "snapshots": {
-#                  "enabled": "true",
-#                  "updatePolicy": "always"
-#                }
-#              },
-#              {
-#                "id": "liquibase-pro",
-#                "url": "https://maven.pkg.github.com/liquibase/liquibase-pro",
-#                "releases": {
-#                  "enabled": "false"
-#                },
-#                "snapshots": {
-#                  "enabled": "true",
-#                  "updatePolicy": "always"
-#                }
-#              }
-#            ]
-#          servers: |
-#            [
-#              {
-#                "id": "liquibase-pro",
-#                "username": "liquibot",
-#                "password": "${{ secrets.LIQUIBOT_PAT }}"
-#              },
-#              {
-#                "id": "liquibase",
-#                "username": "liquibot",
-#                "password": "${{ secrets.LIQUIBOT_PAT }}"
-#              }
-#            ]
-#
-#      - name: configure auth
-#        id: auth
-#        uses: 'google-github-actions/auth@v2'
-#        with:
-#          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
-#
-#      - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
-#        env:
-#          LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
-#        run: |
-#          mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
-#
-#      - name: Test Reporter # Generate a test report using the Test Reporter action
-#        uses: dorny/test-reporter@v1.6.0
-#        if: always() # Run the action even if the previous steps fail
-#        with:
-#          name: Liquibase Test Harness - ${{ matrix.liquibase-support-level }} Reports # Set the name of the test report
-#          path: target/surefire-reports/TEST-*.xml # Set the path to the test report files
-#          reporter: java-junit # Set the reporter to use
-#          fail-on-error: false # Set fail-on-error to false to show report even if it has failed tests
-#
-#      - name: Archive Bigquery Database Test Results
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: bigquery-test-results
-#          path: target/surefire-reports
-#
-#      - name: Test Summary
-#        uses: test-summary/action@v1
-#        with:
-#          paths: "target/surefire-reports/**/TEST-*.xml"
-#        if: always()
+  test:
+    name: Run Test Harness
+    runs-on: ubuntu-latest
+    needs: [setup]
+    strategy:
+      matrix:
+        liquibase-support-level: [Foundational ] # Define the different test levels to run
+      fail-fast: false # Set fail-fast to false to run all test levels even if some of them fail
+    env:
+      github-token: ${{ secrets.LIQUIBOT_PAT_GPM_ACCESS }}
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+      checks: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+        #look for dependencies in maven
+      - name: maven-settings-xml-action
+        uses: whelk-io/maven-settings-xml-action@v21
+        with:
+          repositories: |
+            [
+              {
+                "id": "liquibase",
+                "url": "https://maven.pkg.github.com/liquibase/liquibase",
+                "releases": {
+                  "enabled": "false"
+                },
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always"
+                }
+              },
+              {
+                "id": "liquibase-pro",
+                "url": "https://maven.pkg.github.com/liquibase/liquibase-pro",
+                "releases": {
+                  "enabled": "false"
+                },
+                "snapshots": {
+                  "enabled": "true",
+                  "updatePolicy": "always"
+                }
+              }
+            ]
+          servers: |
+            [
+              {
+                "id": "liquibase-pro",
+                "username": "liquibot",
+                "password": "${{ secrets.LIQUIBOT_PAT }}"
+              },
+              {
+                "id": "liquibase",
+                "username": "liquibot",
+                "password": "${{ secrets.LIQUIBOT_PAT }}"
+              }
+            ]
+
+      - name: configure auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
+        env:
+          LIQUIBASE_PRO_LICENSE_KEY: ${{ secrets.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
+        run: |
+          mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
+
+      - name: Test Reporter # Generate a test report using the Test Reporter action
+        uses: dorny/test-reporter@v1.6.0
+        if: always() # Run the action even if the previous steps fail
+        with:
+          name: Liquibase Test Harness - ${{ matrix.liquibase-support-level }} Reports # Set the name of the test report
+          path: target/surefire-reports/TEST-*.xml # Set the path to the test report files
+          reporter: java-junit # Set the reporter to use
+          fail-on-error: false # Set fail-on-error to false to show report even if it has failed tests
+
+      - name: Archive Bigquery Database Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: bigquery-test-results
+          path: target/surefire-reports
+
+      - name: Test Summary
+        uses: test-summary/action@v1
+        with:
+          paths: "target/surefire-reports/**/TEST-*.xml"
+        if: always()
 
 
   destroy:
