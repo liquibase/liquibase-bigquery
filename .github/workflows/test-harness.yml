@@ -214,4 +214,3 @@ jobs:
         run: |
           terraform state pull
           terraform destroy -target=module.bigquery.google_bigquery_dataset.main -auto-approve
-
