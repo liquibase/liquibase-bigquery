@@ -211,4 +211,7 @@ jobs:
 
       - name: Terraform Destroy
         id: terraform_destroy
-        run: terraform destroy -target=module.bigquery.google_bigquery_dataset.main -auto-approve
+        run: |
+          terraform state pull
+          terraform destroy -target=module.bigquery.google_bigquery_dataset.main -auto-approve
+
