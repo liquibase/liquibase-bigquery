@@ -210,10 +210,9 @@ jobs:
         id: terraform_init
         run: terraform init
 
-      - name: Install gsutil
-        id: gsutil_install
-        run: |
-          sudo apt-get install google-cloud-sdk
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+        export_default_credentials: true
 
       - name: Terraform Destroy
         id: terraform_destroy
