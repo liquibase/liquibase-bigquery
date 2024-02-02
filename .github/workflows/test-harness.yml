@@ -215,5 +215,5 @@ jobs:
       - name: Terraform Destroy
         id: terraform_destroy
         run: |
-          terraform state pull | gsutil cp - gs://gh-liquibase-testharnesstests/terraform.tfstate
-          terraform destroy -target=module.bigquery -auto-approve
+          spacectl stack task -id liquibase-bigquery-testharness-tests -tail true 
+          terraform destroy -auto-approve
