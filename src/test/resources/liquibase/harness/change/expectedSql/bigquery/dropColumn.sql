@@ -1,2 +1,2 @@
-ALTER TABLE harness_test_ds.posts ADD COLUMN varcharColumn STRING(25)
-ALTER TABLE harness_test_ds.posts DROP COLUMN varcharColumn
+ALTER TABLE oleh.posts ADD COLUMN varcharColumn STRING(25)
+ALTER TABLE oleh.posts DROP COLUMN varcharColumn
