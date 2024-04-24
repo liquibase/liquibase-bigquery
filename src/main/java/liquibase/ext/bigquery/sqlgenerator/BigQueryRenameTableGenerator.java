@@ -20,6 +20,10 @@ public class BigQueryRenameTableGenerator extends RenameTableGenerator {
         return BIGQUERY_PRIORITY_DATABASE;
     }
 
+    @Override
+    public boolean supports(RenameTableStatement statement, Database database) {
+        return database instanceof BigqueryDatabase;
+    }
 
     @Override
     public Sql[] generateSql(RenameTableStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
