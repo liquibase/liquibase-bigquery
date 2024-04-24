@@ -1,13 +1,13 @@
 package liquibase.ext.bigquery.change;
 
 import liquibase.change.AddColumnConfig;
-import liquibase.change.ChangeMetaData;
 import liquibase.change.DatabaseChange;
 import liquibase.change.core.AddColumnChange;
 import liquibase.change.core.DropColumnChange;
 import liquibase.change.core.MergeColumnChange;
 import liquibase.database.Database;
 import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.RawSqlStatement;
 import liquibase.structure.core.Column;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @DatabaseChange(name="mergeColumns",
         description = "Concatenates the values in two columns, joins them by with string, and stores the resulting value in a new column.",
-        priority = ChangeMetaData.PRIORITY_DATABASE)
+        priority = PrioritizedService.PRIORITY_DATABASE)
 public class BigQueryMergeColumnChange extends MergeColumnChange {
 
     @Override
