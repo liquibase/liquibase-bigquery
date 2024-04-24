@@ -53,6 +53,7 @@ public class BigqueryDatabase extends AbstractJdbcDatabase {
         return BIGQUERY_PRIORITY_DATABASE;
     }
 
+    @Override
     public boolean supportsDatabaseChangeLogHistory() {
         return true;
     }

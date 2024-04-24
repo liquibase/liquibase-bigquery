@@ -13,6 +13,7 @@ import liquibase.snapshot.jvm.SchemaSnapshotGenerator;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Catalog;
 import liquibase.structure.core.Schema;
+import liquibase.util.JdbcUtil;
 import liquibase.util.JdbcUtils;
 
 import java.sql.ResultSet;
@@ -44,7 +45,7 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
                     .getSchemas(database.getDefaultCatalogName(), null);
 
             while (schemas.next()) {
-                returnList.add(JdbcUtils.getValueForColumn(schemas, "TABLE_SCHEM", database));
+                returnList.add(JdbcUtil.getValueForColumn(schemas, "TABLE_SCHEM", database));
             }
         } finally {
             if (schemas != null) {
@@ -62,7 +63,7 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
 
         String catalogName = ((Schema) example).getCatalogName();
         String schemaName = example.getName();
-        if (database.supportsSchemas()) {
+        if (database.supports(Schema.class)) {
             if (catalogName == null) {
                 catalogName = database.getDefaultCatalogName();
             }
@@ -70,7 +71,7 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
             if (schemaName == null) {
                 schemaName = database.getDefaultSchemaName();
             }
-        } else if (database.supportsCatalogs()) {
+        } else if (database.supports(Catalog.class)) {
             if (catalogName == null && schemaName != null) {
                 catalogName = schemaName;
                 schemaName = null;
@@ -85,7 +86,7 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
         database.setObjectQuotingStrategy(ObjectQuotingStrategy.LEGACY);
 
         try {
-            if (database.supportsSchemas()) {
+            if (database.supports(Schema.class)) {
                 String[] schemaNames = this.getDatabaseSchemaNames(database);
 
                 for (String tableSchema : schemaNames) {

@@ -35,8 +35,12 @@ public class StringDataTypeBigQuery extends VarcharType {
                 type.setType("STRING");
             } else {
                 String firstParameter = String.valueOf(this.getParameters()[0]);
-                int stringSize = Integer.parseInt(firstParameter);
-                if (stringSize == 65535) {
+                try {
+                    int stringSize = Integer.parseInt(firstParameter);
+                    if (stringSize == 65535) {
+                     type.setType("STRING");
+                    }
+                } catch (NumberFormatException e) {
                     type.setType("STRING");
                 }
             }
@@ -57,6 +61,7 @@ public class StringDataTypeBigQuery extends VarcharType {
         }
     }
 
+    @Override
     public LoadDataChange.LOAD_DATA_TYPE getLoadTypeName() {
         return LoadDataChange.LOAD_DATA_TYPE.STRING;
     }
