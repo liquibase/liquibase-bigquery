@@ -1,3 +1,5 @@
+
+
 package liquibase.ext.bigquery.change;
 
 import liquibase.change.AddColumnConfig;
