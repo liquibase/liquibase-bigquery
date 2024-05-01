@@ -7,7 +7,8 @@ import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.InsertOrUpdateGenerator;
 import liquibase.statement.core.InsertOrUpdateStatement;
-import liquibase.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+
 
 public class BigQueryInsertOrUpdateGenerator extends InsertOrUpdateGenerator {
     public BigQueryInsertOrUpdateGenerator() {
@@ -56,7 +57,7 @@ public class BigQueryInsertOrUpdateGenerator extends InsertOrUpdateGenerator {
 
     @Override
     protected String getRecordCheck(InsertOrUpdateStatement insertOrUpdateStatement, Database database, String whereClause) {
-        if (StringUtil.isEmpty(whereClause)) {
+        if (StringUtils.isEmpty(whereClause)) {
             whereClause = "WHERE 1 = 1";
         }
         return "MERGE INTO " + insertOrUpdateStatement.getTableName() + " USING (SELECT 1) ON " + whereClause + " WHEN NOT MATCHED THEN ";

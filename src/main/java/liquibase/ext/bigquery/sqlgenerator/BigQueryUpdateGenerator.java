@@ -9,8 +9,8 @@ import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.UpdateGenerator;
 import liquibase.statement.DatabaseFunction;
 import liquibase.statement.core.UpdateStatement;
-import liquibase.util.BooleanUtil;
 import liquibase.util.SqlUtil;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.Date;
 
@@ -75,7 +75,7 @@ public class BigQueryUpdateGenerator extends UpdateGenerator {
 
             sqlString = database.getDateLiteral(date);
         } else if (newValue instanceof Boolean) {
-            if (BooleanUtil.isTrue((Boolean) newValue)) {
+            if (BooleanUtils.isTrue((Boolean) newValue)) {
                 sqlString = DataTypeFactory.getInstance().getTrueBooleanValue(database);
             } else {
                 sqlString = DataTypeFactory.getInstance().getFalseBooleanValue(database);
