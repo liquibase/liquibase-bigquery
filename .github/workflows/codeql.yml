@@ -16,5 +16,5 @@ jobs:
     secrets: inherit
     with:
       languages: '["java"]'
-      buildCommand: 'mvn clean install'
+      # buildCommand: 'mvn clean install'
       extraCommand: mvn install:install-file -Dfile=lib/GoogleBigQueryJDBC42.jar -DgroupId=com.simba.googlebigquery.jdbc -DartifactId=GoogleBigQueryJDBC42 -Dversion=4.2 -Dpackaging=jar
