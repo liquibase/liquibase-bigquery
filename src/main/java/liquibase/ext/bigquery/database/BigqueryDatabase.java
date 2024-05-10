@@ -13,6 +13,7 @@ import liquibase.statement.core.GetViewDefinitionStatement;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Catalog;
 import liquibase.structure.core.Schema;
+import liquibase.structure.core.Sequence;
 import liquibase.structure.core.Table;
 
 import java.util.HashSet;
@@ -344,5 +345,12 @@ public class BigqueryDatabase extends AbstractJdbcDatabase {
         reservedWords.add("WITHIN");
 
         return reservedWords;
+    }
+
+    public boolean supports(Class<? extends DatabaseObject> object) {
+        if (Sequence.class.isAssignableFrom(object)) {
+            return false;
+        }
+        return true;
     }
 }
