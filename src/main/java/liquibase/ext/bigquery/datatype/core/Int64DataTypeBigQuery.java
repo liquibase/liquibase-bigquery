@@ -14,7 +14,7 @@ import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY
         name = "int64",
         minParameters = 0,
         maxParameters = 0,
-        priority = 1
+        priority = LiquibaseDataType.PRIORITY_DATABASE
 )
 public class Int64DataTypeBigQuery extends LiquibaseDataType {
     public Int64DataTypeBigQuery() {

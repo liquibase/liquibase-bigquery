@@ -12,10 +12,10 @@ import liquibase.ext.bigquery.database.BigqueryDatabase;
         name = "numeric",
         minParameters = 0,
         maxParameters = 0,
-        priority = 1
+        priority = LiquibaseDataType.PRIORITY_DATABASE
 )
-public class NumberDataTypeBigQuery extends LiquibaseDataType {
-    public NumberDataTypeBigQuery() {
+public class NumericDataTypeBigQuery extends LiquibaseDataType {
+    public NumericDataTypeBigQuery() {
     }
 
     public boolean supports(Database database) {

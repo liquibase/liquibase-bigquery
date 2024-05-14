@@ -14,7 +14,7 @@ import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY
         name = "geography",
         minParameters = 0,
         maxParameters = 0,
-        priority = BIGQUERY_PRIORITY_DATABASE
+        priority = LiquibaseDataType.PRIORITY_DATABASE
 )
 public class GeographyDataTypeBigQuery extends LiquibaseDataType {
     public GeographyDataTypeBigQuery() {
