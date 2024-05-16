@@ -4,22 +4,16 @@ import liquibase.CatalogAndSchema;
 import liquibase.Scope;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.Database;
-import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
 import liquibase.ext.bigquery.database.BigqueryDatabase;
-import liquibase.snapshot.*;
+import liquibase.snapshot.DatabaseSnapshot;
+import liquibase.snapshot.SnapshotGenerator;
 import liquibase.snapshot.jvm.ForeignKeySnapshotGenerator;
-import liquibase.snapshot.jvm.PrimaryKeySnapshotGenerator;
 import liquibase.statement.core.RawParameterizedSqlStatement;
-import liquibase.statement.core.RawSqlStatement;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.*;
-import org.apache.commons.lang3.StringUtils;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.*;
 
 public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGenerator {
@@ -35,11 +29,11 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
 
     @Override
     public Class<? extends SnapshotGenerator>[] replaces() {
-        return new Class[]{PrimaryKeySnapshotGenerator.class};
+        return new Class[]{ForeignKeySnapshotGenerator.class};
     }
 
     @Override
-    protected DatabaseObject snapshotObject(DatabaseObject example, DatabaseSnapshot snapshot) throws DatabaseException, InvalidExampleException {
+    protected DatabaseObject snapshotObject(DatabaseObject example, DatabaseSnapshot snapshot) throws DatabaseException {
         Database database = snapshot.getDatabase();
         Table fkTable = ((ForeignKey) example).getForeignKeyTable();
         String searchTableName = database.correctObjectName(fkTable.getName(), Table.class);
@@ -47,6 +41,7 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
         String searchCatalog = ((AbstractJdbcDatabase) database).getJdbcCatalogName(fkTable.getSchema());
         String searchSchema = ((AbstractJdbcDatabase) database).getJdbcSchemaName(fkTable.getSchema());
         String systemSchema = database.getSystemSchema().toUpperCase();
+
         String query = new StringBuilder("SELECT ")
                 .append("TC.CONSTRAINT_NAME as CONSTRAINT_NAME, ")
                 .append("KCU.TABLE_CATALOG as FOREIGN_KEY_TABLE_CATALOG, ")
@@ -60,11 +55,10 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
                 .append(String.format("FROM %1$s.%2$s.TABLE_CONSTRAINTS as TC JOIN %1$s.%2$s.CONSTRAINT_COLUMN_USAGE as CCU on " +
                                 "TC.CONSTRAINT_NAME=CCU.CONSTRAINT_NAME JOIN %1$s.%2$s.KEY_COLUMN_USAGE as KCU on KCU.CONSTRAINT_NAME=TC.CONSTRAINT_NAME ",
                         searchSchema, systemSchema))
-                .append(String.format("WHERE TC.TABLE_NAME='%s' AND TC.table_schema='%s' AND TC.table_catalog='%s' AND TC" +
-                        ".constraint_type='FOREIGN KEY' AND TC.CONSTRAINT_NAME='%s'", searchTableName, searchSchema, searchCatalog, fkFullName))
+                .append("WHERE TC.TABLE_NAME=? AND TC.TABLE_SCHEMA=? AND TC.TABLE_CATALOG=? AND TC.CONSTRAINT_TYPE='FOREIGN KEY' AND TC.CONSTRAINT_NAME=?")
                 .toString();
         List<Map<String, ?>> results = Scope.getCurrentScope().getSingleton(ExecutorService.class)
-                .getExecutor("jdbc", database).queryForList(new RawParameterizedSqlStatement(query));
+                .getExecutor("jdbc", database).queryForList(new RawParameterizedSqlStatement(query, searchTableName, searchSchema, searchCatalog, fkFullName));
 
         if (!results.isEmpty()) {
             ForeignKey foreignKey = null;
@@ -72,8 +66,8 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
                 Table foreignKeyTable = new Table().setName(Objects.toString(resultMap.get("FOREIGN_KEY_TABLE")));
 
                 String foreignKeyName =
-                        Optional.ofNullable((String)resultMap.get("CONSTRAINT_NAME"))
-                                .map(s-> s.replace(foreignKeyTable.getName()+".", ""))
+                        Optional.ofNullable((String) resultMap.get("CONSTRAINT_NAME"))
+                                .map(s -> s.replace(foreignKeyTable.getName() + ".", ""))
                                 .orElse("null");
 
                 foreignKeyTable.setSchema(new Schema(new Catalog(Objects.toString(resultMap.get("FOREIGN_KEY_TABLE_CATALOG"))),
@@ -121,19 +115,18 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
 
             CatalogAndSchema catalogAndSchema = (new CatalogAndSchema(schema.getCatalogName(), schema.getName())).customize(database);
             String jdbcSchemaName = database.correctObjectName(((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema), Schema.class);
-            String query = String.format("SELECT CONSTRAINT_NAME FROM %s.%s.TABLE_CONSTRAINTS WHERE table_name='%s' AND table_schema='%s' AND " +
-                            "table_catalog='%s' AND CONSTRAINT_TYPE='FOREIGN KEY';",
-                    jdbcSchemaName, database.getSystemSchema().toUpperCase(), table.getName(), schema.getName(), schema.getCatalogName());
+            String query = String.format("SELECT CONSTRAINT_NAME FROM %s.%s.TABLE_CONSTRAINTS WHERE TABLE_NAME=? AND TABLE_SCHEMA=? AND TABLE_CATALOG=? AND " +
+                    "CONSTRAINT_TYPE='FOREIGN KEY';", jdbcSchemaName, database.getSystemSchema().toUpperCase());
             List<Map<String, ?>> tableConstraints = Scope.getCurrentScope().getSingleton(ExecutorService.class)
-                    .getExecutor("jdbc", database).queryForList(new RawSqlStatement(query));
+                    .getExecutor("jdbc", database).queryForList(new RawParameterizedSqlStatement(query, table.getName(), schema.getName(),
+                            schema.getCatalogName()));
             for (Map<String, ?> row : tableConstraints) {
                 String foreignKeyName = Objects.toString(row.get("CONSTRAINT_NAME"));
                 ForeignKey fk = new ForeignKey()
-                                .setName(foreignKeyName.replace(table.getName()+".", ""))
-                                .setForeignKeyTable(table);
+                        .setName(foreignKeyName.replace(table.getName() + ".", ""))
+                        .setForeignKeyTable(table);
                 table.getOutgoingForeignKeys().add(fk);
             }
         }
     }
 }
-
