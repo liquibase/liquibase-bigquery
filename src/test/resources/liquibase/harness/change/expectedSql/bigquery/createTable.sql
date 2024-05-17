@@ -1,1 +1,1 @@
-CREATE TABLE harness_test_ds.test_table (test_id INT, test_column STRING)
+CREATE TABLE harness_test_ds.test_table (test_id INT, test_FK_column INT, CONSTRAINT fk_test FOREIGN KEY (test_FK_column) REFERENCES harness_test_ds.authors(id) NOT ENFORCED)
