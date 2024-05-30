@@ -1,8 +1,7 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
-import liquibase.statement.core.RenameTableStatement;
 import liquibase.statement.core.RenameViewStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class BigQueryRenameViewGeneratorTest {
 
     private BigQueryRenameViewGenerator generator;
-    private BigqueryDatabase database;
+    private BigQueryDatabase database;
     private RenameViewStatement statement;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
+        database = new BigQueryDatabase();
         generator = new BigQueryRenameViewGenerator();
         statement = new RenameViewStatement("catalogName", "schemaName", "oldTableName", "newTableName");
     }

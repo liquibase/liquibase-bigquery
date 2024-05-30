@@ -1,9 +1,7 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
-import liquibase.ext.bigquery.database.BigqueryDatabase;
-import liquibase.sql.Sql;
-import liquibase.statement.core.RenameTableStatement;
-import liquibase.statement.core.UpdateStatement;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
+import liquibase.sql.Sql;import liquibase.statement.core.UpdateStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class BigQueryUpdateGeneratorTest {
 
     private BigQueryUpdateGenerator generator;
-    private BigqueryDatabase database;
+    private BigQueryDatabase database;
     private UpdateStatement statement;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
+        database = new BigQueryDatabase();
         generator = new BigQueryUpdateGenerator();
         statement = new UpdateStatement("catalogName", "schemaName", "tableName");
     }

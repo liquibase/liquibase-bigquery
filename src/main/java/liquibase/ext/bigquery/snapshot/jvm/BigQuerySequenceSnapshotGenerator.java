@@ -5,7 +5,7 @@ import liquibase.Scope;
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.SnapshotGenerator;
 import liquibase.snapshot.jvm.SequenceSnapshotGenerator;
@@ -18,11 +18,11 @@ public class BigQuerySequenceSnapshotGenerator extends SequenceSnapshotGenerator
 
         @Override
         public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-            if (!(database instanceof BigqueryDatabase)) {
+            if (!(database instanceof BigQueryDatabase)) {
                 return PRIORITY_NONE;
             }
             int priority = super.getPriority(objectType, database);
-            if (priority > PRIORITY_NONE && database instanceof BigqueryDatabase) {
+            if (priority > PRIORITY_NONE && database instanceof BigQueryDatabase) {
                 priority += PRIORITY_DATABASE;
             }
             return priority;
@@ -41,7 +41,7 @@ public class BigQuerySequenceSnapshotGenerator extends SequenceSnapshotGenerator
 
     @Override
     protected SqlStatement getSelectSequenceStatement(Schema schema, Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
             // BigQuery does not support sequences
             //String catalog = database.getDefaultCatalogName();
             CatalogAndSchema catalogAndSchema = (new CatalogAndSchema(schema.getCatalogName(), schema.getName())).customize(database);
@@ -51,7 +51,7 @@ public class BigQuerySequenceSnapshotGenerator extends SequenceSnapshotGenerator
             return new RawSqlStatement(
             "SELECT NULL AS SEQUENCE_NAME, NULL AS START_VALUE, NULL AS AS MIN_VALUE, NULL AS MAX_VALUE, " +
                     "NULL AS INCREMENT_BY, " +
-                    "NULL AS WILL_CYCLE " +
+                    "NULL AS WILL_CYCLE FROM " +
                     jdbcSchemaName + "." + database.getSystemSchema().toUpperCase() + ".COLUMNS WHERE 1=0");
         }
         return super.getSelectSequenceStatement(schema, database);

@@ -1,9 +1,8 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.statement.core.CreateDatabaseChangeLogLockTableStatement;
-import liquibase.statement.core.RenameTableStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +10,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BigqueryCreateDatabaseChangeLogLockTableGeneratorTest {
 
-    private BigqueryCreateDatabaseChangeLogLockTableGenerator generator;
-    private BigqueryDatabase database;
+    private BigQueryCreateDatabaseChangeLogLockTableGenerator generator;
+    private BigQueryDatabase database;
     private CreateDatabaseChangeLogLockTableStatement statement;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
-        generator = new BigqueryCreateDatabaseChangeLogLockTableGenerator();
+        database = new BigQueryDatabase();
+        generator = new BigQueryCreateDatabaseChangeLogLockTableGenerator();
         statement = new CreateDatabaseChangeLogLockTableStatement();
     }
 

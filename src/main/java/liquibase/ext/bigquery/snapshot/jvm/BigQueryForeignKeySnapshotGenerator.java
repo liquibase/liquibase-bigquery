@@ -6,7 +6,7 @@ import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.SnapshotGenerator;
 import liquibase.snapshot.jvm.ForeignKeySnapshotGenerator;
@@ -20,7 +20,7 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
 
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
             return super.getPriority(objectType, database) + PRIORITY_DATABASE;
         } else {
             return PRIORITY_NONE;

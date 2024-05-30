@@ -1,9 +1,8 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.statement.core.DeleteStatement;
-import liquibase.statement.core.RenameTableStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,14 +10,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class BigqueryDeleteGeneratorTest {
 
-    private BigqueryDeleteGenerator generator;
-    private BigqueryDatabase database;
+    private BigQueryDeleteGenerator generator;
+    private BigQueryDatabase database;
     private DeleteStatement statement;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
-        generator = new BigqueryDeleteGenerator();
+        database = new BigQueryDatabase();
+        generator = new BigQueryDeleteGenerator();
         statement = new DeleteStatement("catalog", "schema", "table");
     }
 

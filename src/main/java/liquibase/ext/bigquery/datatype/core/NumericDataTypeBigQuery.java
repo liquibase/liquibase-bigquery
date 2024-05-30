@@ -5,7 +5,7 @@ import liquibase.database.Database;
 import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 
 
 @DataTypeInfo(
@@ -18,12 +18,14 @@ public class NumericDataTypeBigQuery extends LiquibaseDataType {
     public NumericDataTypeBigQuery() {
     }
 
+    @Override
     public boolean supports(Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
+    @Override
     public DatabaseDataType toDatabaseDataType(Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
 
             return new DatabaseDataType("NUMERIC", this.getParameters());
         } else {

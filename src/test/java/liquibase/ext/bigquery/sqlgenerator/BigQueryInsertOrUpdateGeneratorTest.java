@@ -1,9 +1,8 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
 import liquibase.change.ColumnConfig;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.statement.core.InsertOrUpdateStatement;
-import liquibase.statement.core.InsertStatement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class BigQueryInsertOrUpdateGeneratorTest {
 
     private BigQueryInsertOrUpdateGenerator generator;
-    private BigqueryDatabase database;
+    private BigQueryDatabase database;
     private InsertOrUpdateStatement statement;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
+        database = new BigQueryDatabase();
         generator = new BigQueryInsertOrUpdateGenerator();
         statement = new InsertOrUpdateStatement("catalog", "schema", "table", "column", false);
         ColumnConfig columnConfig = new ColumnConfig();
