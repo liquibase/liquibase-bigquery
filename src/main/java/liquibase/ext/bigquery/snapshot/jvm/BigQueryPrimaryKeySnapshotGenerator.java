@@ -6,7 +6,7 @@ import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.Executor;
 import liquibase.executor.ExecutorService;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.InvalidExampleException;
 import liquibase.snapshot.SnapshotGenerator;
@@ -27,7 +27,7 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
 
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigqueryDatabase)) {
+        if (!(database instanceof BigQueryDatabase)) {
             return PRIORITY_NONE;
         }
         int priority = super.getPriority(objectType, database);

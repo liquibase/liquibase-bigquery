@@ -5,9 +5,7 @@ import liquibase.database.Database;
 import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
-
-import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY_DATABASE;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 
 
 @DataTypeInfo(
@@ -22,12 +20,12 @@ public class Int64DataTypeBigQuery extends LiquibaseDataType {
 
     @Override
     public boolean supports(Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override
     public DatabaseDataType toDatabaseDataType(Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
 
             DatabaseDataType type = new DatabaseDataType("INT64", this.getParameters());
             type.setType("INT64");

@@ -5,7 +5,7 @@ import liquibase.database.Database;
 import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.core.VarcharType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 
 import liquibase.datatype.LiquibaseDataType;
 
@@ -23,12 +23,12 @@ public class StringDataTypeBigQuery extends VarcharType {
 
     @Override
     public boolean supports(Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override
     public DatabaseDataType toDatabaseDataType(Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
 
             DatabaseDataType type = new DatabaseDataType("STRING", this.getParameters());
             if (this.getParameters().length == 0) {

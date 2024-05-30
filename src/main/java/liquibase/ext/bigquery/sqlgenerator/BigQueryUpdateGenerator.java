@@ -1,10 +1,11 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
-import liquibase.database.BigqueryDatabase;
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
+import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.UpdateGenerator;
 import liquibase.statement.DatabaseFunction;
 import liquibase.statement.core.UpdateStatement;
@@ -26,7 +27,7 @@ public class BigQueryUpdateGenerator extends UpdateGenerator {
 
     @Override
     public boolean supports(UpdateStatement statement, Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override

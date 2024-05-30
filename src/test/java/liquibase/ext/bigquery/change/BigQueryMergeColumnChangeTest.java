@@ -1,6 +1,6 @@
 package liquibase.ext.bigquery.change;
 
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.DropColumnStatement;
@@ -13,11 +13,11 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
 class BigQueryMergeColumnChangeTest {
 
-    private BigqueryDatabase database;
+    private BigQueryDatabase database;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
+        database = new BigQueryDatabase();
     }
 
     @Test

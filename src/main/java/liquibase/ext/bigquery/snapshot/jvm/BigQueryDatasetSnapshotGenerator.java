@@ -6,7 +6,7 @@ import liquibase.database.ObjectQuotingStrategy;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.diff.compare.DatabaseObjectComparatorFactory;
 import liquibase.exception.DatabaseException;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.InvalidExampleException;
 import liquibase.snapshot.jvm.SchemaSnapshotGenerator;
@@ -14,7 +14,6 @@ import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Catalog;
 import liquibase.structure.core.Schema;
 import liquibase.util.JdbcUtil;
-import liquibase.util.JdbcUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,11 +24,11 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
 
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigqueryDatabase)) {
+        if (!(database instanceof BigQueryDatabase)) {
             return PRIORITY_NONE;
         }
         int priority = super.getPriority(objectType, database);
-        if (priority > PRIORITY_NONE && database instanceof BigqueryDatabase) {
+        if (priority > PRIORITY_NONE && database instanceof BigQueryDatabase) {
             priority += PRIORITY_DATABASE;
         }
         return priority;

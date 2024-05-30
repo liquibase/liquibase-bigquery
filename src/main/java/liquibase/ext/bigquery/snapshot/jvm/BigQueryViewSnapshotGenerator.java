@@ -6,7 +6,7 @@ import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.jvm.ViewSnapshotGenerator;
 import liquibase.statement.core.RawSqlStatement;
@@ -23,11 +23,11 @@ public class BigQueryViewSnapshotGenerator extends ViewSnapshotGenerator {
 
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigqueryDatabase)) {
+        if (!(database instanceof BigQueryDatabase)) {
             return PRIORITY_NONE;
         }
         int priority = super.getPriority(objectType, database);
-        if (priority > PRIORITY_NONE && database instanceof BigqueryDatabase) {
+        if (priority > PRIORITY_NONE && database instanceof BigQueryDatabase) {
             priority += PRIORITY_DATABASE;
         }
         return priority;

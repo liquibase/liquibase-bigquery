@@ -1,7 +1,7 @@
 package liquibase.ext.bigquery.datatype.core;
 
 import liquibase.datatype.DatabaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +12,7 @@ class BoolDataTypeBigQueryTest {
     @Test
     void toDatabaseDataType() {
         BoolDataTypeBigQuery boolDataTypeBigQuery = new BoolDataTypeBigQuery();
-        DatabaseDataType databaseDataType = boolDataTypeBigQuery.toDatabaseDataType(new BigqueryDatabase());
+        DatabaseDataType databaseDataType = boolDataTypeBigQuery.toDatabaseDataType(new BigQueryDatabase());
         assertNotNull(databaseDataType);
         assertEquals("BOOL", databaseDataType.getType());
     }

@@ -5,9 +5,9 @@ import liquibase.database.Database;
 import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 
-import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY_DATABASE;
+import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY_DATABASE;
 
 @DataTypeInfo(
         name = "float64",
@@ -21,12 +21,12 @@ public class Float64DataTypeBigQuery extends LiquibaseDataType {
 
     @Override
     public boolean supports(Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override
     public DatabaseDataType toDatabaseDataType(Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
 
             DatabaseDataType type = new DatabaseDataType("FLOAT64", this.getParameters());
             type.setType("FLOAT64");

@@ -1,12 +1,12 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
-import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY_DATABASE;
+import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY_DATABASE;
 
 import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
 import liquibase.datatype.DatabaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sqlgenerator.core.AddColumnGenerator;
 import liquibase.statement.AutoIncrementConstraint;
 import liquibase.statement.core.AddColumnStatement;
@@ -71,6 +71,6 @@ public class BigQueryAddColumnGenerator extends AddColumnGenerator {
 
 	@Override
 	public boolean supports(AddColumnStatement statement, Database database) {
-		return database instanceof BigqueryDatabase;
+		return database instanceof BigQueryDatabase;
 	}
 }

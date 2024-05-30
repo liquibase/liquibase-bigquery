@@ -1,7 +1,7 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
 import liquibase.change.ColumnConfig;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.statement.core.AddPrimaryKeyStatement;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,12 +12,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BigQueryAddPrimaryKeyConstraintGeneratorTest {
 
     private BigQueryAddPrimaryKeyConstraintGenerator generator;
-    private BigqueryDatabase database;
+    private BigQueryDatabase database;
     private AddPrimaryKeyStatement statement;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
+        database = new BigQueryDatabase();
         generator = new BigQueryAddPrimaryKeyConstraintGenerator();
         statement = new AddPrimaryKeyStatement(
                 "catalogName",

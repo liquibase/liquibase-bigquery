@@ -8,11 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BigqueryDatabaseUnitTest {
 
-    private BigqueryDatabase database;
+    private BigQueryDatabase database;
 
     @BeforeEach
     void setUp() {
-        database = new BigqueryDatabase();
+        database = new BigQueryDatabase();
     }
 
     @Test

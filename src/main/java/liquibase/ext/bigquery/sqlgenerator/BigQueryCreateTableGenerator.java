@@ -3,7 +3,7 @@ package liquibase.ext.bigquery.sqlgenerator;
 import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.datatype.DatabaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY_DATABASE;
+import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY_DATABASE;
 
 public class BigQueryCreateTableGenerator extends CreateTableGenerator {
 
@@ -30,7 +30,7 @@ public class BigQueryCreateTableGenerator extends CreateTableGenerator {
 
     @Override
     public boolean supports(CreateTableStatement statement, Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override

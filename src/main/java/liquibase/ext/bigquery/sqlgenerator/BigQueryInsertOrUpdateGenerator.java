@@ -3,7 +3,7 @@ package liquibase.ext.bigquery.sqlgenerator;
 import java.util.Date;
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.InsertOrUpdateGenerator;
 import liquibase.statement.core.InsertOrUpdateStatement;
@@ -15,7 +15,7 @@ public class BigQueryInsertOrUpdateGenerator extends InsertOrUpdateGenerator {
 
     @Override
     public boolean supports(InsertOrUpdateStatement statement, Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override

@@ -4,7 +4,7 @@ import liquibase.Scope;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.CachedRow;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.SnapshotGenerator;
@@ -22,11 +22,11 @@ public class BigQueryUniqueConstraintSnapshotGenerator extends UniqueConstraintS
 
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigqueryDatabase)) {
+        if (!(database instanceof BigQueryDatabase)) {
             return PRIORITY_NONE;
         }
         int priority = super.getPriority(objectType, database);
-        if (priority > PRIORITY_NONE && database instanceof BigqueryDatabase) {
+        if (priority > PRIORITY_NONE && database instanceof BigQueryDatabase) {
             priority += PRIORITY_DATABASE;
         }
         return priority;
