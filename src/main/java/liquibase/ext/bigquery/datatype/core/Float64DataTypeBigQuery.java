@@ -13,7 +13,7 @@ import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY
         name = "float64",
         minParameters = 0,
         maxParameters = 0,
-        priority = BIGQUERY_PRIORITY_DATABASE
+        priority = LiquibaseDataType.PRIORITY_DATABASE
 )
 public class Float64DataTypeBigQuery extends LiquibaseDataType {
     public Float64DataTypeBigQuery() {

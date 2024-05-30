@@ -5,6 +5,7 @@ import liquibase.datatype.DataTypeFactory;
 import liquibase.ext.bigquery.database.BigqueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
+import liquibase.sqlgenerator.SqlGenerator;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.ModifyDataTypeGenerator;
 import liquibase.statement.core.ModifyDataTypeStatement;
@@ -14,6 +15,11 @@ public class BigQueryModifyDataTypeGenerator extends ModifyDataTypeGenerator {
     @Override
     public boolean supports(ModifyDataTypeStatement statement, Database database) {
         return database instanceof BigqueryDatabase;
+    }
+
+    @Override
+    public int getPriority() {
+        return SqlGenerator.PRIORITY_DATABASE;
     }
 
     @Override
