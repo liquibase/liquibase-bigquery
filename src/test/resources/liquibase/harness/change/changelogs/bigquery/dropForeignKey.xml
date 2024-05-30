@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="oleh" id="1">
+        <!--       TODO without PrimaryKey on authors table we can't create ForeignKey. This depends on PrimaryKey PR, need to add addPrimaryKey change here-->
+        <addForeignKeyConstraint baseColumnNames="author_id"
+                                 baseTableName="posts"
+                                 constraintName="fk_posts_authors_test"
+                                 referencedColumnNames="id"
+                                 referencedTableName="authors"/>
+        <dropForeignKeyConstraint baseTableName="posts"
+                                  constraintName="fk_posts_authors_test"/>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

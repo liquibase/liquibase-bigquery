@@ -39,7 +39,7 @@ public class BigQueryUniqueConstraintSnapshotGenerator extends UniqueConstraintS
 
     @Override
     protected List<CachedRow> listConstraints(Table table, DatabaseSnapshot snapshot, Schema schema) throws DatabaseException, SQLException {
-        Scope.getCurrentScope().getLog(this.getClass()).info("Constraints not supported by BigQuery");
+        Scope.getCurrentScope().getLog(this.getClass()).info("Unique Constraints not supported by BigQuery");
         return new ArrayList<>(); //new BigQueryResultSetConstraintsExtractor(snapshot, schema.getCatalogName(), schema.getName(), table.getName())).fastFetch();
     }
 
