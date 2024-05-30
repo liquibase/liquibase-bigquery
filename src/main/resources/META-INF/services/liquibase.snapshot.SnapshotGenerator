@@ -3,4 +3,4 @@ liquibase.ext.bigquery.snapshot.jvm.BigQueryUniqueConstraintSnapshotGenerator
 liquibase.ext.bigquery.snapshot.jvm.BigQuerySequenceSnapshotGenerator
 liquibase.ext.bigquery.snapshot.jvm.BigQueryViewSnapshotGenerator
 liquibase.ext.bigquery.snapshot.jvm.BigQueryForeignKeySnapshotGenerator
-
+liquibase.ext.bigquery.snapshot.jvm.BigQueryPrimaryKeySnapshotGenerator
