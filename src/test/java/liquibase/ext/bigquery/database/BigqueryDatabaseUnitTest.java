@@ -41,7 +41,7 @@ public class BigqueryDatabaseUnitTest {
     }
 
     @Test
-    void getQuotingEndCharacter() {
+    public void getQuotingEndCharacter() {
         assertEquals("`", database.getQuotingEndCharacter());
     }
 
