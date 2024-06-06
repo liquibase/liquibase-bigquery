@@ -5,23 +5,28 @@ import liquibase.statement.SqlStatement;
 import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.DropColumnStatement;
 import liquibase.statement.core.RawSqlStatement;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+//import org.junit.jupiter.api.BeforeEach;
+//import org.junit.jupiter.api.Test;
+//
+//import static org.junit.jupiter.api.Assertions.assertEquals;
+//import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 
-class BigQueryMergeColumnChangeTest {
+public class BigQueryMergeColumnChangeTest {
 
     private BigQueryDatabase database;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         database = new BigQueryDatabase();
     }
 
     @Test
-    void generateStatements() {
+    public void generateStatements() {
         BigQueryMergeColumnChange change = new BigQueryMergeColumnChange();
         change.setTableName("tableName");
         change.setColumn1Name("column1Name");
@@ -34,10 +39,10 @@ class BigQueryMergeColumnChangeTest {
 
         SqlStatement[] sqlStatements = change.generateStatements(database);
         assertEquals(4, sqlStatements.length);
-        assertInstanceOf(AddColumnStatement.class, sqlStatements[0]);
-        assertInstanceOf(RawSqlStatement.class, sqlStatements[1]);
-        assertInstanceOf(DropColumnStatement.class, sqlStatements[2]);
-        assertInstanceOf(DropColumnStatement.class, sqlStatements[3]);
+        assertTrue(sqlStatements[0] instanceof AddColumnStatement);
+        assertTrue(sqlStatements[1] instanceof RawSqlStatement);
+        assertTrue(sqlStatements[2] instanceof DropColumnStatement);
+        assertTrue(sqlStatements[3] instanceof DropColumnStatement);
 
         AddColumnStatement addColumnStatement = (AddColumnStatement) sqlStatements[0];
         assertEquals("finalColumnName", addColumnStatement.getColumnName());

@@ -4,19 +4,19 @@ import liquibase.change.ColumnConfig;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.statement.core.AddForeignKeyConstraintStatement;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-class BigQueryAddForeignKeyConstraintGeneratorTest {
+public class BigQueryAddForeignKeyConstraintGeneratorTest {
 
     private BigQueryAddForeignKeyConstraintGenerator generator;
     private BigQueryDatabase database;
     private AddForeignKeyConstraintStatement statement;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         database = new BigQueryDatabase();
         generator = new BigQueryAddForeignKeyConstraintGenerator();
         statement = new AddForeignKeyConstraintStatement(
@@ -32,7 +32,7 @@ class BigQueryAddForeignKeyConstraintGeneratorTest {
     }
 
     @Test
-    void generateSql() {
+    public void generateSql() {
         Sql[] sql = generator.generateSql(statement, database, null);
         assertEquals(1, sql.length);
         assertEquals(";", sql[0].getEndDelimiter());

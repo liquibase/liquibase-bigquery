@@ -2,14 +2,15 @@ package liquibase.ext.bigquery.datatype.core;
 
 import liquibase.datatype.DatabaseDataType;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
-class Int64DataTypeBigQueryTest {
+public class Int64DataTypeBigQueryTest {
 
     @Test
-    void toDatabaseDataType() {
+    public void toDatabaseDataType() {
         Int64DataTypeBigQuery int64DataTypeBigQuery = new Int64DataTypeBigQuery();
         DatabaseDataType databaseDataType = int64DataTypeBigQuery.toDatabaseDataType(new BigQueryDatabase());
         assertNotNull(databaseDataType);

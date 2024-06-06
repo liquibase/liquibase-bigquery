@@ -1,42 +1,42 @@
 package liquibase.ext.bigquery.database;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-class BigqueryDatabaseUnitTest {
+public class BigqueryDatabaseUnitTest {
 
     private BigQueryDatabase database;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         database = new BigQueryDatabase();
     }
 
     @Test
-    void getShortName() {
+    public void getShortName() {
         assertEquals("bigquery", database.getShortName());
     }
 
     @Test
-    void getDefaultDatabaseProductName() {
+    public void getDefaultDatabaseProductName() {
         assertEquals("Google BigQuery", database.getDefaultDatabaseProductName());
     }
 
     @Test
-    void supportsDatabaseChangeLogHistory() {
+    public void supportsDatabaseChangeLogHistory() {
         assertTrue(database.supportsDatabaseChangeLogHistory());
     }
 
     @Test
-    void getCurrentDateTimeFunction() {
+    public void getCurrentDateTimeFunction() {
         assertEquals("CURRENT_DATETIME()", database.getCurrentDateTimeFunction());
     }
 
     @Test
-    void getQuotingStartCharacter() {
+    public void getQuotingStartCharacter() {
         assertEquals("`", database.getQuotingStartCharacter());
     }
 

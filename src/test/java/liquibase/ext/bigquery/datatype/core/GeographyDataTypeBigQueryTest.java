@@ -2,14 +2,14 @@ package liquibase.ext.bigquery.datatype.core;
 
 import liquibase.datatype.DatabaseDataType;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class GeographyDataTypeBigQueryTest {
+public class GeographyDataTypeBigQueryTest {
 
     @Test
-    void toDatabaseDataType() {
+    public void toDatabaseDataType() {
         GeographyDataTypeBigQuery datatype = new GeographyDataTypeBigQuery();
         DatabaseDataType databaseDataType = datatype.toDatabaseDataType(new BigQueryDatabase());
         assertEquals("GEOGRAPHY", databaseDataType.getType());

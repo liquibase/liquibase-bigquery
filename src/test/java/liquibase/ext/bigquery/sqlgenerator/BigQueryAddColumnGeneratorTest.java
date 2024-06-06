@@ -2,26 +2,26 @@ package liquibase.ext.bigquery.sqlgenerator;
 
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.statement.core.AddColumnStatement;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class BigQueryAddColumnGeneratorTest {
+public class BigQueryAddColumnGeneratorTest {
 
     private BigQueryAddColumnGenerator generator;
     private BigQueryDatabase database;
     private AddColumnStatement statement;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         database = new BigQueryDatabase();
         generator = new BigQueryAddColumnGenerator();
         statement = new AddColumnStatement();
     }
 
     @Test
-    void generateSingleColumnSQL() {
+    public void generateSingleColumnSQL() {
         String sql = generator.generateSingleColumnSQL(statement, database);
         assertEquals(" ADD COLUMN null", sql);
     }

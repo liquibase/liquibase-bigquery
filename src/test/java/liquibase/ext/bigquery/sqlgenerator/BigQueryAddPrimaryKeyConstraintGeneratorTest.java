@@ -4,19 +4,19 @@ import liquibase.change.ColumnConfig;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.statement.core.AddPrimaryKeyStatement;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-class BigQueryAddPrimaryKeyConstraintGeneratorTest {
+public class BigQueryAddPrimaryKeyConstraintGeneratorTest {
 
     private BigQueryAddPrimaryKeyConstraintGenerator generator;
     private BigQueryDatabase database;
     private AddPrimaryKeyStatement statement;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         database = new BigQueryDatabase();
         generator = new BigQueryAddPrimaryKeyConstraintGenerator();
         statement = new AddPrimaryKeyStatement(
@@ -28,7 +28,7 @@ class BigQueryAddPrimaryKeyConstraintGeneratorTest {
     }
 
     @Test
-    void generateSql() {
+    public void generateSql() {
         Sql[] sql = generator.generateSql(statement, database, null);
         assertEquals(1, sql.length);
         assertEquals(";", sql[0].getEndDelimiter());

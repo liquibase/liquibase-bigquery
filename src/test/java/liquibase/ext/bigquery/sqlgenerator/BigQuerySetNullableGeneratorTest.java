@@ -3,26 +3,26 @@ package liquibase.ext.bigquery.sqlgenerator;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.statement.core.SetNullableStatement;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
-class BigQuerySetNullableGeneratorTest {
+public class BigQuerySetNullableGeneratorTest {
 
     private BigQuerySetNullableGenerator generator;
     private BigQueryDatabase database;
     private SetNullableStatement statement;
 
-    @BeforeEach
-    void setUp() {
+    @Before
+    public void setUp() {
         database = new BigQueryDatabase();
         generator = new BigQuerySetNullableGenerator();
         statement = new SetNullableStatement("catalogName", "schemaName", "tableName", "columnName", "columnDataType", false);
     }
 
     @Test
-    void generateSql() {
+    public void generateSql() {
         Sql[] sql = generator.generateSql(statement, database, null);
         assertEquals(0, sql.length);
     }

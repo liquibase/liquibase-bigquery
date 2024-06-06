@@ -52,10 +52,10 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.2</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
             <scope>test</scope>
+            <version>4.13.2</version>
         </dependency>
         <dependency>
             <groupId>com.simba.googlebigquery.jdbc</groupId>
