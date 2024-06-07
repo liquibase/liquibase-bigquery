@@ -31,6 +31,13 @@
 		<tag>HEAD</tag>
 	</scm>
 
+    <repositories>
+        <repository>
+            <id>Bigquery Simba driver local repository</id>
+            <url>file://${project.basedir}/local-repo</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -60,9 +67,7 @@
         <dependency>
             <groupId>com.simba.googlebigquery.jdbc</groupId>
             <artifactId>GoogleBigQueryJDBC42</artifactId>
-            <version>4.2</version> <!-- 1.5.4.1008 -->
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GoogleBigQueryJDBC42.jar</systemPath>
+            <version>1.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
