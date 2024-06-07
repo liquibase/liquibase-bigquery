@@ -3,17 +3,20 @@ package liquibase.ext.bigquery.sqlgenerator;
 import java.util.Date;
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.InsertOrUpdateGenerator;
 import liquibase.statement.core.InsertOrUpdateStatement;
+import org.apache.commons.lang3.StringUtils;
+
 
 public class BigQueryInsertOrUpdateGenerator extends InsertOrUpdateGenerator {
     public BigQueryInsertOrUpdateGenerator() {
     }
 
+    @Override
     public boolean supports(InsertOrUpdateStatement statement, Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class BigQueryInsertOrUpdateGenerator extends InsertOrUpdateGenerator {
 
     @Override
     protected String getRecordCheck(InsertOrUpdateStatement insertOrUpdateStatement, Database database, String whereClause) {
-        if (whereClause == null || "".equals(whereClause)) {
+        if (StringUtils.isEmpty(whereClause)) {
             whereClause = "WHERE 1 = 1";
         }
         return "MERGE INTO " + insertOrUpdateStatement.getTableName() + " USING (SELECT 1) ON " + whereClause + " WHEN NOT MATCHED THEN ";

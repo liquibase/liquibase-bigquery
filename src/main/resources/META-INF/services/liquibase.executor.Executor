@@ -1,1 +1,1 @@
-liquibase.ext.bigquery.executor.BigqueryExecutor
+liquibase.ext.bigquery.executor.BigQueryExecutor

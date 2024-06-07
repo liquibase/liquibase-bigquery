@@ -5,34 +5,41 @@ import liquibase.database.Database;
 import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
+import liquibase.servicelocator.PrioritizedService;
 
 
 @DataTypeInfo(
         name = "bignumeric",
         minParameters = 0,
         maxParameters = 0,
-        priority = 1
+        priority = PrioritizedService.PRIORITY_DATABASE
 )
 public class BignumericDataTypeBigQuery extends LiquibaseDataType {
 
-    private final static String BIGNUMERIC = "BIGNUMERIC";
+    private static final String BIGNUMERIC = "BIGNUMERIC";
 
     public BignumericDataTypeBigQuery() {
     }
 
+    @Override
     public boolean supports(Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
+    @Override
     public DatabaseDataType toDatabaseDataType(Database database) {
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
 
             DatabaseDataType type = new DatabaseDataType(BIGNUMERIC, this.getParameters());
             if (this.getParameters().length > 0) {
                 String firstParameter = String.valueOf(this.getParameters()[0]);
-                int typePrecision = Integer.parseInt(firstParameter);
-                if (typePrecision == 77) {
+                try {
+                    int typePrecision = Integer.parseInt(firstParameter);
+                    if (typePrecision == 77) {
+                        type.setType(BIGNUMERIC);
+                    }
+                } catch (NumberFormatException e) {
                     type.setType(BIGNUMERIC);
                 }
             }

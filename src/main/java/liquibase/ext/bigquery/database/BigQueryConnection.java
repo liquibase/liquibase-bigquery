@@ -13,19 +13,20 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
-import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY_DATABASE;
+import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY_DATABASE;
 
 /**
  * A Bigquery specific Delegate that removes the calls to autocommit
  */
 
-public class BigqueryConnection extends JdbcConnection {
+public class BigQueryConnection extends JdbcConnection {
+    private static final String LOCATION = "Location";
     private S42Connection con;
 
-    public BigqueryConnection() {
+    public BigQueryConnection() {
     }
 
-    public BigqueryConnection(Connection conn) throws SQLException {
+    public BigQueryConnection(Connection conn) throws SQLException {
         this.con = (S42Connection) conn;
         String url = conn.getMetaData().getURL();
         Scope.getCurrentScope().getLog(this.getClass()).fine(String.format("Setting connection to %s  Location=%s", url, getUnderlyingBQConnectionLocation()));
@@ -85,9 +86,9 @@ public class BigqueryConnection extends JdbcConnection {
 
     @Override
     public void open(String url, Driver driverObject, Properties driverProperties) throws DatabaseException {
-        if (driverProperties.stringPropertyNames().contains("Location")) {
-            String locationValue = getUrlParamValue(url, "Location");
-            driverProperties.setProperty("Location", locationValue);
+        if (driverProperties.stringPropertyNames().contains(LOCATION)) {
+            String locationValue = getUrlParamValue(url, LOCATION);
+            driverProperties.setProperty(LOCATION, locationValue);
         }
 
         Scope.getCurrentScope().getLog(this.getClass()).fine(String.format("Opening connection to %s  driverProperties=%s", url, driverProperties));
@@ -124,6 +125,7 @@ public class BigqueryConnection extends JdbcConnection {
 
     @Override
     public void setAutoCommit(boolean autoCommit) throws DatabaseException {
+        // not supported by BigQuery
     }
 
     @Override
