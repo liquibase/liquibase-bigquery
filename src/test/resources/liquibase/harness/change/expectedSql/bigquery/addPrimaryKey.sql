@@ -1,0 +1,1 @@
+ALTER TABLE harness_test_ds.posts ADD PRIMARY KEY (id) NOT ENFORCED
