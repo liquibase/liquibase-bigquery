@@ -6,14 +6,14 @@ import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
+import liquibase.servicelocator.PrioritizedService;
 
-import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY_DATABASE;
 
 @DataTypeInfo(
         name = "float64",
         minParameters = 0,
         maxParameters = 0,
-        priority = LiquibaseDataType.PRIORITY_DATABASE
+        priority = PrioritizedService.PRIORITY_DATABASE
 )
 public class Float64DataTypeBigQuery extends LiquibaseDataType {
     public Float64DataTypeBigQuery() {

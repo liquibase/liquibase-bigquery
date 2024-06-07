@@ -6,13 +6,14 @@ import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.LiquibaseDataType;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
+import liquibase.servicelocator.PrioritizedService;
 
 
 @DataTypeInfo(
         name = "numeric",
         minParameters = 0,
         maxParameters = 0,
-        priority = LiquibaseDataType.PRIORITY_DATABASE
+        priority = PrioritizedService.PRIORITY_DATABASE
 )
 public class NumericDataTypeBigQuery extends LiquibaseDataType {
     public NumericDataTypeBigQuery() {

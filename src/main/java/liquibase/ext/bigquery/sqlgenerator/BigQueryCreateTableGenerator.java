@@ -12,6 +12,7 @@ import liquibase.statement.DatabaseFunction;
 import liquibase.statement.ForeignKeyConstraint;
 import liquibase.statement.PrimaryKeyConstraint;
 import liquibase.statement.core.CreateTableStatement;
+import liquibase.structure.core.Catalog;
 import liquibase.structure.core.Schema;
 import liquibase.structure.core.Table;
 
@@ -103,7 +104,7 @@ public class BigQueryCreateTableGenerator extends CreateTableGenerator {
                     .append(") REFERENCES ");
             if (referencesString != null) {
                 if (!referencesString.contains(".") && (database.getDefaultSchemaName() != null) && database
-                        .getOutputDefaultSchema() && (database.supportsSchemas() || database.supportsCatalogs())) {
+                        .getOutputDefaultSchema() && (database.supports(Schema.class) || database.supports(Catalog.class))) {
                     referencesString = database.escapeObjectName(database.getDefaultSchemaName(), Schema.class) + "." + referencesString;
                 }
                 buffer.append(referencesString);

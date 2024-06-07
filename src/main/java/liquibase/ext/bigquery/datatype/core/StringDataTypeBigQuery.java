@@ -6,15 +6,14 @@ import liquibase.datatype.DataTypeInfo;
 import liquibase.datatype.DatabaseDataType;
 import liquibase.datatype.core.VarcharType;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
-
-import liquibase.datatype.LiquibaseDataType;
+import liquibase.servicelocator.PrioritizedService;
 
 
 @DataTypeInfo(
         name = "string",
         minParameters = 0,
         maxParameters = 0,
-        priority = LiquibaseDataType.PRIORITY_DATABASE,
+        priority = PrioritizedService.PRIORITY_DATABASE,
         aliases = { "varchar", "clob", "java.lang.String" }
 )
 public class StringDataTypeBigQuery extends VarcharType {
