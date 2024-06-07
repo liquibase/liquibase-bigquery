@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.simba.googlebigquery.jdbc</groupId>
             <artifactId>GoogleBigQueryJDBC42</artifactId>
-            <version>1.5.4</version>
+            <version>4.2</version> <!-- 1.5.4.1008 -->
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/GoogleBigQueryJDBC42.jar</systemPath>
         </dependency>
