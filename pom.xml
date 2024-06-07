@@ -60,17 +60,13 @@
         <dependency>
             <groupId>com.simba.googlebigquery.jdbc</groupId>
             <artifactId>GoogleBigQueryJDBC42</artifactId>
-            <version>4.2</version>
+            <version>1.5.4</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/GoogleBigQueryJDBC42.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-bigquery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-bigquerystorage</artifactId>
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
