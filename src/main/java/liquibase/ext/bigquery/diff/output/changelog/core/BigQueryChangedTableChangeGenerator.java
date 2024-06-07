@@ -9,7 +9,7 @@ import liquibase.diff.ObjectDifferences;
 import liquibase.diff.output.DiffOutputControl;
 import liquibase.diff.output.changelog.ChangeGeneratorChain;
 import liquibase.diff.output.changelog.core.ChangedTableChangeGenerator;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Table;
 
@@ -21,7 +21,7 @@ public class BigQueryChangedTableChangeGenerator extends ChangedTableChangeGener
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
         int priority = super.getPriority(objectType, database);
-        if (database instanceof BigqueryDatabase) {
+        if (database instanceof BigQueryDatabase) {
             priority += PRIORITY_DATABASE;
         }
         return priority;

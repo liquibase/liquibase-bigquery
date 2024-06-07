@@ -3,15 +3,15 @@ package liquibase.ext.bigquery.executor;
 import liquibase.database.Database;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.jvm.JdbcExecutor;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.visitor.SqlVisitor;
 import liquibase.statement.SqlStatement;
 
 import java.util.List;
 
-import static liquibase.ext.bigquery.database.BigqueryDatabase.BIGQUERY_PRIORITY_DATABASE;
+import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY_DATABASE;
 
-public class BigqueryExecutor extends JdbcExecutor {
+public class BigQueryExecutor extends JdbcExecutor {
 
     @Override
     public int getPriority() {
@@ -20,7 +20,7 @@ public class BigqueryExecutor extends JdbcExecutor {
 
     @Override
     public boolean supports(Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override
