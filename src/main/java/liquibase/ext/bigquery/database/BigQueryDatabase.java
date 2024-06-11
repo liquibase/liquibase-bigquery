@@ -11,10 +11,7 @@ import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
 import liquibase.statement.core.GetViewDefinitionStatement;
 import liquibase.structure.DatabaseObject;
-import liquibase.structure.core.Catalog;
-import liquibase.structure.core.Schema;
-import liquibase.structure.core.Sequence;
-import liquibase.structure.core.Table;
+import liquibase.structure.core.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -52,11 +49,6 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     @Override
     public int getPriority() {
         return BIGQUERY_PRIORITY_DATABASE;
-    }
-
-    @Override
-    public boolean supportsDatabaseChangeLogHistory() {
-        return true;
     }
 
     @Override
@@ -101,29 +93,6 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     }
 
     @Override
-    public boolean supports(Class<? extends DatabaseObject> object) {
-        if (Sequence.class.isAssignableFrom(object)) {
-            return false;
-        }
-        return super.supports(object);
-    }
-
-    @Override
-    public boolean supportsInitiallyDeferrableColumns() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsDropTableCascadeConstraints() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsTablespaces() {
-        return false;
-    }
-
-    @Override
     protected String getQuotingStartCharacter() {
         return "`";
     }
@@ -153,10 +122,14 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
 
         return null;
     }
+    @Override
+    public boolean supportsDatabaseChangeLogHistory() {
+        return true;
+    }
 
     @Override
     public boolean supportsSequences() {
-        return this.supports(Sequence.class);
+        return false;
     }
 
     @Override
@@ -165,12 +138,33 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     }
 
     @Override
-    public boolean supportsPrimaryKeyNames() {
+    public boolean supportsNotNullConstraintNames() {
         return false;
     }
 
     @Override
-    public boolean supportsNotNullConstraintNames() {
+    public boolean supports(Class<? extends DatabaseObject> object) {
+        if (Sequence.class.isAssignableFrom(object)) {
+            return false;
+        }
+        if (UniqueConstraint.class.isAssignableFrom(object)) {
+            return false;
+        }
+        return super.supports(object);
+    }
+
+    @Override
+    public boolean supportsInitiallyDeferrableColumns() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsDropTableCascadeConstraints() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsTablespaces() {
         return false;
     }
 
