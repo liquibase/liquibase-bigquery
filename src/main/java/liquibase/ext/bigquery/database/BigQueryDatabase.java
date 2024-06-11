@@ -129,7 +129,7 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
 
     @Override
     public boolean supportsSequences() {
-        return false;
+        return this.supports(Sequence.class);
     }
 
     @Override
