@@ -68,6 +68,11 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     }
 
     @Override
+    public CatalogAndSchema.CatalogAndSchemaCase getSchemaAndCatalogCase() {
+        return CatalogAndSchema.CatalogAndSchemaCase.ORIGINAL_CASE;
+    }
+
+    @Override
     public String escapeStringForDatabase(String string) {
         if (string == null) {
             return null;
