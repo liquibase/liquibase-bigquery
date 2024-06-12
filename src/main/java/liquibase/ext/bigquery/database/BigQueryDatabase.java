@@ -142,6 +142,10 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
         return false;
     }
 
+    public boolean supportsPrimaryKeyNames() {
+        return false;
+    }
+
     @Override
     public boolean supports(Class<? extends DatabaseObject> object) {
         if (Sequence.class.isAssignableFrom(object)) {
