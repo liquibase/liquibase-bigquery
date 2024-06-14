@@ -53,9 +53,10 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
         }
         PrimaryKey returnKey = null;
 
-        String keyColumnUsageStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE table_name = ?", schema.getSchema());
+        String keyColumnUsageStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE CONSTRAINT_NAME = ?",
+                schema.getSchema());
         Executor executor = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", database);
-        List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(keyColumnUsageStatement, searchTableName));
+        List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(keyColumnUsageStatement, example.getName()));
         String columnName;
         for (Map<String, ?> map : maps) {
             columnName = Objects.toString(map.get("COLUMN_NAME"), null);
@@ -93,7 +94,8 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
             Schema schema = table.getSchema();
 
             Executor executor = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", database);
-            String tableConstraintsStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE table_name = ?", schema.getSchema());
+            String tableConstraintsStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE " +
+                    "CONSTRAINT_TYPE = 'PRIMARY KEY' AND table_name = ?", schema.getSchema());
             List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(tableConstraintsStatement, table.getName()));
 
             for (Map<String, ?> map : maps) {
