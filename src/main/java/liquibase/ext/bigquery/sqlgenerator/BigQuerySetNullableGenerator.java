@@ -1,7 +1,7 @@
 package liquibase.ext.bigquery.sqlgenerator;
 
 import liquibase.database.Database;
-import liquibase.ext.bigquery.database.BigqueryDatabase;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
 import liquibase.sqlgenerator.core.SetNullableGenerator;
@@ -16,7 +16,7 @@ public class BigQuerySetNullableGenerator  extends SetNullableGenerator {
 
     @Override
     public boolean supports(SetNullableStatement statement, Database database) {
-        return database instanceof BigqueryDatabase;
+        return database instanceof BigQueryDatabase;
     }
 
     @Override

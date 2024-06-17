@@ -2,6 +2,7 @@ package liquibase.ext.bigquery.sqlgenerator;
 
 import liquibase.database.Database;
 import liquibase.datatype.DataTypeFactory;
+import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.sql.Sql;
 import liquibase.sql.UnparsedSql;
 import liquibase.sqlgenerator.SqlGeneratorChain;
@@ -9,6 +10,7 @@ import liquibase.sqlgenerator.core.UpdateGenerator;
 import liquibase.statement.DatabaseFunction;
 import liquibase.statement.core.UpdateStatement;
 import liquibase.util.SqlUtil;
+import org.apache.commons.lang3.BooleanUtils;
 
 import java.util.Date;
 
@@ -23,6 +25,10 @@ public class BigQueryUpdateGenerator extends UpdateGenerator {
         return PRIORITY_DATABASE;
     }
 
+    @Override
+    public boolean supports(UpdateStatement statement, Database database) {
+        return database instanceof BigQueryDatabase;
+    }
 
     @Override
     public Sql[] generateSql(UpdateStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
@@ -34,7 +40,7 @@ public class BigQueryUpdateGenerator extends UpdateGenerator {
             sql.append(" ")
                     .append(database.escapeColumnName(statement.getCatalogName(), statement.getSchemaName(), statement.getTableName(), column))
                     .append(" = ")
-                    .append(this.convertToString(statement.getNewColumnValues().get(column), database))
+                    .append(this.convert(statement.getNewColumnValues().get(column), database))
                     .append(",");
         }
 
@@ -54,7 +60,7 @@ public class BigQueryUpdateGenerator extends UpdateGenerator {
         };
     }
 
-    private String convertToString(Object newValue, Database database) {
+    private String convert(Object newValue, Database database) {
         String sqlString;
         if ((newValue == null) || "NULL".equalsIgnoreCase(newValue.toString())) {
             sqlString = "NULL";
@@ -69,7 +75,7 @@ public class BigQueryUpdateGenerator extends UpdateGenerator {
 
             sqlString = database.getDateLiteral(date);
         } else if (newValue instanceof Boolean) {
-            if (((Boolean) newValue)) {
+            if (BooleanUtils.isTrue((Boolean) newValue)) {
                 sqlString = DataTypeFactory.getInstance().getTrueBooleanValue(database);
             } else {
                 sqlString = DataTypeFactory.getInstance().getFalseBooleanValue(database);

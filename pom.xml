@@ -31,6 +31,13 @@
 		<tag>HEAD</tag>
 	</scm>
 
+    <repositories>
+        <repository>
+            <id>Bigquery Simba driver local repository</id>
+            <url>file://${project.basedir}/local-repo</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -43,7 +50,7 @@
             <dependency>
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
-                <version>26.37.0</version>
+                <version>26.40.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -60,36 +67,21 @@
         <dependency>
             <groupId>com.simba.googlebigquery.jdbc</groupId>
             <artifactId>GoogleBigQueryJDBC42</artifactId>
-            <version>4.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/GoogleBigQueryJDBC42.jar</systemPath>
+            <version>1.5.4</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-bigquery</artifactId>
-            <version>2.38.2</version>
-        </dependency>
-        <!--        TODO this 3 google dependencies could be redundant-->
-        <dependency>
-            <groupId>com.google.cloud</groupId>
-            <artifactId>google-cloud-bigquerystorage</artifactId>
-            <version>2.47.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client</artifactId>
-            <version>1.44.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.api-client</groupId>
-            <artifactId>google-api-client-jackson2</artifactId>
-            <version>2.4.0</version>
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
             <version>1.5.1</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 
@@ -112,7 +104,7 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>4.27.0</version>
+                <version>4.28.0</version>
                 <configuration>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <propertyFile>target/classes/liquibase.properties</propertyFile>

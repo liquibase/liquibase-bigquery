@@ -1,1 +1,1 @@
-INVALID TEST -- BigQuery does not support PK
+ALTER TABLE harness_test_ds.posts ADD PRIMARY KEY (id) NOT ENFORCED

@@ -1,1 +1,1 @@
-liquibase.ext.bigquery.database.BigqueryConnection
+liquibase.ext.bigquery.database.BigQueryConnection
