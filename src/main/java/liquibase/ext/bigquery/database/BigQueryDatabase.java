@@ -13,6 +13,8 @@ import liquibase.statement.core.GetViewDefinitionStatement;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -357,5 +359,24 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
         reservedWords.add("WITHIN");
 
         return reservedWords;
+    }
+
+    @Override
+    public void checkDatabaseConnection() throws DatabaseException {
+        BigQueryConnection connection = (BigQueryConnection) getConnection();
+        try {
+            String catalogName = getConnectionCatalogName();
+            String schemaName = getConnectionSchemaName();
+            ResultSet schemasAlikeUsed = connection.getMetaData().getSchemas(catalogName, schemaName);
+            while (schemasAlikeUsed.next()) {
+                if (schemasAlikeUsed.getString(1).equals(schemaName)) {
+                    return;
+                }
+            }
+            throw new DatabaseException(String.format("Please specify existing dataset in connection url. " +
+                    "Current connection points to '%s.%s'", catalogName, schemaName));
+        } catch (SQLException e) {
+            Scope.getCurrentScope().getLog(getClass()).info("Error checking database connection", e);
+        }
     }
 }
