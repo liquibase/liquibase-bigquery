@@ -21,6 +21,9 @@
         <sonar.tests>src/test/groovy</sonar.tests>
         <junit.version>5.11.3</junit.version>
         <junit-platform.version>1.11.3</junit-platform.version>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <liquibase-test-harness.version>1.0.10</liquibase-test-harness.version>
+        <jacoco.fileset.directory>target</jacoco.fileset.directory>
     </properties>
 
     <scm>
