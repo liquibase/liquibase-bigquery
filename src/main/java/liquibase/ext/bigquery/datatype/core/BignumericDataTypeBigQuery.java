@@ -19,9 +19,6 @@ public class BignumericDataTypeBigQuery extends LiquibaseDataType {
 
     private static final String BIGNUMERIC = "BIGNUMERIC";
 
-    public BignumericDataTypeBigQuery() {
-    }
-
     @Override
     public boolean supports(Database database) {
         return database instanceof BigQueryDatabase;

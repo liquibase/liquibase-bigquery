@@ -121,6 +121,6 @@ public class BigQueryCreateTableGenerator extends CreateTableGenerator {
         String sql = buffer.toString().replaceFirst(",\\s*$", "") + ")";
 
         additionalSql.add(0, new UnparsedSql(sql, this.getAffectedTable(statement)));
-        return additionalSql.toArray(new Sql[additionalSql.size()]);
+        return additionalSql.toArray(new Sql[0]);
     }
 }

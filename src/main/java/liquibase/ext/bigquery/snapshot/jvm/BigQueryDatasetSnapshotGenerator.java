@@ -24,35 +24,26 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
 
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigQueryDatabase)) {
+        if (database instanceof BigQueryDatabase) {
+            return super.getPriority(objectType, database) + PRIORITY_DATABASE;
+        } else {
             return PRIORITY_NONE;
         }
-        int priority = super.getPriority(objectType, database);
-        if (priority > PRIORITY_NONE && database instanceof BigQueryDatabase) {
-            priority += PRIORITY_DATABASE;
-        }
-        return priority;
     }
 
     @Override
     protected String[] getDatabaseSchemaNames(Database database) throws SQLException, DatabaseException {
         List<String> returnList = new ArrayList<>();
 
-        ResultSet schemas = null;
-        try {
-            schemas = ((JdbcConnection) database.getConnection()).getMetaData()
-                    .getSchemas(database.getDefaultCatalogName(), null);
+        try (ResultSet schemas = ((JdbcConnection) database.getConnection()).getMetaData()
+                .getSchemas(database.getDefaultCatalogName(), null)) {
 
             while (schemas.next()) {
                 returnList.add(JdbcUtil.getValueForColumn(schemas, "TABLE_SCHEM", database));
             }
-        } finally {
-            if (schemas != null) {
-                schemas.close();
-            }
         }
 
-        return returnList.toArray(new String[returnList.size()]);
+        return returnList.toArray(new String[0]);
     }
 
     @Override
@@ -106,8 +97,7 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
                 Catalog catalog = example1.getCatalog();
                 String[] dbCatalogNames = this.getDatabaseCatalogNames(database);
 
-                for (int i = 0; i < dbCatalogNames.length; ++i) {
-                    String candidateCatalogName = dbCatalogNames[i];
+                for (String candidateCatalogName : dbCatalogNames) {
                     if (catalog.equals(new Catalog(candidateCatalogName))) {
                         match = new Schema(catalog, catalogName);
                     }

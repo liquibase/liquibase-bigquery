@@ -9,7 +9,7 @@ import liquibase.database.Database;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.servicelocator.PrioritizedService;
 import liquibase.statement.SqlStatement;
-import liquibase.statement.core.RawSqlStatement;
+import liquibase.statement.core.RawParameterizedSqlStatement;
 import liquibase.structure.core.Column;
 
 import java.util.ArrayList;
@@ -28,7 +28,6 @@ public class BigQueryMergeColumnChange extends MergeColumnChange {
 
     @Override
     public SqlStatement[] generateStatements(final Database database) {
-        List<SqlStatement> statements = new ArrayList<>();
 
         AddColumnChange addNewColumnChange = new AddColumnChange();
         addNewColumnChange.setSchemaName(getSchemaName());
@@ -37,9 +36,9 @@ public class BigQueryMergeColumnChange extends MergeColumnChange {
         columnConfig.setName(getFinalColumnName());
         columnConfig.setType(getFinalColumnType());
         addNewColumnChange.addColumn(columnConfig);
-        statements.addAll(Arrays.asList(addNewColumnChange.generateStatements(database)));
+        List<SqlStatement> statements = new ArrayList<>(Arrays.asList(addNewColumnChange.generateStatements(database)));
 
-        String updateStatement = "";
+        String updateStatement;
 
         updateStatement = "UPDATE " + database.escapeTableName(getCatalogName(), getSchemaName(), getTableName()) +
                 " SET " + database.escapeObjectName(getFinalColumnName(), Column.class)
@@ -47,7 +46,7 @@ public class BigQueryMergeColumnChange extends MergeColumnChange {
                 , "'" + getJoinString() + "'", database.escapeObjectName(getColumn2Name(), Column.class))
                 + " WHERE 1 = 1 ";
 
-        statements.add(new RawSqlStatement(updateStatement));
+        statements.add(new RawParameterizedSqlStatement(updateStatement));
 
         DropColumnChange dropColumn1Change = new DropColumnChange();
         dropColumn1Change.setSchemaName(getSchemaName());
@@ -61,6 +60,6 @@ public class BigQueryMergeColumnChange extends MergeColumnChange {
         dropColumn2Change.setColumnName(getColumn2Name());
         statements.addAll(Arrays.asList(dropColumn2Change.generateStatements(database)));
 
-        return statements.toArray(new SqlStatement[statements.size()]);
+        return statements.toArray(new SqlStatement[0]);
     }
 }
