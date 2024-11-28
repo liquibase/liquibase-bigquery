@@ -8,7 +8,6 @@ import liquibase.executor.Executor;
 import liquibase.executor.ExecutorService;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
-import liquibase.snapshot.InvalidExampleException;
 import liquibase.snapshot.SnapshotGenerator;
 import liquibase.snapshot.jvm.PrimaryKeySnapshotGenerator;
 import liquibase.statement.core.RawParameterizedSqlStatement;
@@ -24,17 +23,14 @@ import java.util.Map;
 import java.util.Objects;
 
 public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGenerator {
-
+    private static final String CONSTRAINT_NAME = "CONSTRAINT_NAME";
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigQueryDatabase)) {
+        if (database instanceof BigQueryDatabase) {
+            return super.getPriority(objectType, database) + PRIORITY_DATABASE;
+        } else {
             return PRIORITY_NONE;
         }
-        int priority = super.getPriority(objectType, database);
-        if (priority > PRIORITY_NONE) {
-            priority += PRIORITY_DATABASE;
-        }
-        return priority;
     }
 
     @Override
@@ -43,18 +39,12 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
     }
 
     @Override
-    protected DatabaseObject snapshotObject(DatabaseObject example, DatabaseSnapshot snapshot) throws DatabaseException, InvalidExampleException {
+    protected DatabaseObject snapshotObject(DatabaseObject example, DatabaseSnapshot snapshot) throws DatabaseException {
         Database database = snapshot.getDatabase();
-        Schema schema = example.getSchema();
-        String searchTableName = null;
-        if (((PrimaryKey) example).getTable() != null) {
-            searchTableName = ((PrimaryKey) example).getTable().getName();
-            searchTableName = database.correctObjectName(searchTableName, Table.class);
-        }
         PrimaryKey returnKey = null;
 
         String keyColumnUsageStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE CONSTRAINT_NAME = ?",
-                schema.getSchema());
+                example.getSchema().getName());
         Executor executor = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", database);
         List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(keyColumnUsageStatement, example.getName()));
         String columnName;
@@ -68,7 +58,7 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
                 String schemaName = (String) map.get("TABLE_SCHEMA");
                 CatalogAndSchema tableSchema = new CatalogAndSchema(catalogName, schemaName);
                 returnKey.setTable((Table) new Table().setName(Objects.toString(map.get("TABLE_NAME"), null)).setSchema(new Schema(tableSchema.getCatalogName(), tableSchema.getSchemaName())));
-                returnKey.setName(Objects.toString(map.get("CONSTRAINT_NAME"), null));
+                returnKey.setName(Objects.toString(map.get(CONSTRAINT_NAME), null));
             }
 
             returnKey.addColumn(position - 1, new Column(columnName)
@@ -91,16 +81,15 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
         if (foundObject instanceof Table) {
             Table table = (Table) foundObject;
             Database database = snapshot.getDatabase();
-            Schema schema = table.getSchema();
 
             Executor executor = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", database);
             String tableConstraintsStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE " +
-                    "CONSTRAINT_TYPE = 'PRIMARY KEY' AND table_name = ?", schema.getSchema());
+                    "CONSTRAINT_TYPE = 'PRIMARY KEY' AND table_name = ?", table.getSchema().getName());
             List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(tableConstraintsStatement, table.getName()));
 
             for (Map<String, ?> map : maps) {
-                if (map.containsKey("CONSTRAINT_NAME")) {
-                    String constraintName = Objects.toString(map.get("CONSTRAINT_NAME"), null);
+                if (map.containsKey(CONSTRAINT_NAME)) {
+                    String constraintName = Objects.toString(map.get(CONSTRAINT_NAME), null);
                     PrimaryKey primaryKey = new PrimaryKey().setName(constraintName);
                     primaryKey.setTable((Table) foundObject);
                     if (!database.isSystemObject(primaryKey)) {

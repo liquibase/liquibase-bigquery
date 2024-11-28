@@ -4,7 +4,7 @@ import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.statement.SqlStatement;
 import liquibase.statement.core.AddColumnStatement;
 import liquibase.statement.core.DropColumnStatement;
-import liquibase.statement.core.RawSqlStatement;
+import liquibase.statement.core.RawParameterizedSqlStatement;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +35,7 @@ public class BigQueryMergeColumnChangeTest {
         SqlStatement[] sqlStatements = change.generateStatements(database);
         assertEquals(4, sqlStatements.length);
         assertTrue(sqlStatements[0] instanceof AddColumnStatement);
-        assertTrue(sqlStatements[1] instanceof RawSqlStatement);
+        assertTrue(sqlStatements[1] instanceof RawParameterizedSqlStatement);
         assertTrue(sqlStatements[2] instanceof DropColumnStatement);
         assertTrue(sqlStatements[3] instanceof DropColumnStatement);
 
@@ -43,8 +43,8 @@ public class BigQueryMergeColumnChangeTest {
         assertEquals("finalColumnName", addColumnStatement.getColumnName());
         assertEquals("finalColumnName", addColumnStatement.getColumnType());
 
-        RawSqlStatement rawSqlStatement = (RawSqlStatement) sqlStatements[1];
-        assertEquals("UPDATE schemaName.tableName SET finalColumnName = column1Name || 'joinString' || column2Name WHERE 1 = 1 ", rawSqlStatement.getSql());
+        RawParameterizedSqlStatement sqlStatement = (RawParameterizedSqlStatement) sqlStatements[1];
+        assertEquals("UPDATE schemaName.tableName SET finalColumnName = column1Name || 'joinString' || column2Name WHERE 1 = 1 ", sqlStatement.getSql());
 
         DropColumnStatement drop1ColumnStatement = (DropColumnStatement) sqlStatements[2];
         assertEquals("column1Name", drop1ColumnStatement.getColumnName());

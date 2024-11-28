@@ -26,9 +26,10 @@ public class BigQueryRenameTableGenerator extends RenameTableGenerator {
     @Override
     public Sql[] generateSql(RenameTableStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
         String sql;
-        sql = "ALTER TABLE " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getOldTableName()) + " RENAME TO " + database.escapeObjectName(statement.getNewTableName(), Table.class);
+        sql = "ALTER TABLE " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getOldTableName()) + " RENAME TO "
+                + database.escapeObjectName(statement.getNewTableName(), Table.class);
 
-        return new Sql[]{new UnparsedSql(sql, new DatabaseObject[]{this.getAffectedOldTable(statement), this.getAffectedNewTable(statement)})};
+        return new Sql[]{new UnparsedSql(sql, this.getAffectedOldTable(statement), this.getAffectedNewTable(statement))};
     }
 
 }

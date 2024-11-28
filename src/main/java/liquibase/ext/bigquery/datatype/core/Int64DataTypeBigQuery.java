@@ -16,8 +16,6 @@ import liquibase.servicelocator.PrioritizedService;
         priority = PrioritizedService.PRIORITY_DATABASE
 )
 public class Int64DataTypeBigQuery extends LiquibaseDataType {
-    public Int64DataTypeBigQuery() {
-    }
 
     @Override
     public boolean supports(Database database) {

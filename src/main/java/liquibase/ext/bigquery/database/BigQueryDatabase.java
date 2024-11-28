@@ -110,7 +110,7 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     }
     @Override
     public String escapeObjectName(String objectName, Class<? extends DatabaseObject> objectType) {
-        if (objectType.equals(Schema.class) || objectType.equals(Catalog.class)) {
+        if (objectType.equals(Schema.class)) {
             return objectName;
         }
         return super.escapeObjectName(objectName, objectType);
@@ -144,6 +144,7 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
         return false;
     }
 
+    @Override
     public boolean supportsPrimaryKeyNames() {
         return false;
     }
