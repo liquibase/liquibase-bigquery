@@ -84,7 +84,7 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
 
             Executor executor = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", database);
             String tableConstraintsStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE " +
-                    "CONSTRAINT_TYPE = 'PRIMARY KEY' AND table_name = ?", table.getSchema().getName());
+                    "CONSTRAINT_TYPE = 'PRIMARY KEY' AND table_name = ?", database.escapeObjectName(table.getSchema().getName(), Schema.class));
             List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(tableConstraintsStatement, table.getName()));
 
             for (Map<String, ?> map : maps) {
