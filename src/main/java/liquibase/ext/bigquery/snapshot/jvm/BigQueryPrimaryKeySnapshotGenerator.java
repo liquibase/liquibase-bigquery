@@ -44,7 +44,7 @@ public class BigQueryPrimaryKeySnapshotGenerator extends PrimaryKeySnapshotGener
         PrimaryKey returnKey = null;
 
         String keyColumnUsageStatement = String.format("SELECT * FROM %s.INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE CONSTRAINT_NAME = ?",
-                example.getSchema().getName());
+                database.escapeObjectName(example.getSchema().getName(), Schema.class));
         Executor executor = Scope.getCurrentScope().getSingleton(ExecutorService.class).getExecutor("jdbc", database);
         List<Map<String, ?>> maps = executor.queryForList(new RawParameterizedSqlStatement(keyColumnUsageStatement, example.getName()));
         String columnName;
