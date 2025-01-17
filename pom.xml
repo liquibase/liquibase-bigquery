@@ -17,7 +17,7 @@
     <url>https://github.com/liquibase/liquibase-bigquery</url>
 
     <properties>
-        <liquibase.version>4.30.0</liquibase.version>
+        <liquibase.version>4.31.0</liquibase.version>
         <sonar.tests>src/test/groovy</sonar.tests>
         <junit.version>5.11.3</junit.version>
         <junit-platform.version>1.11.3</junit-platform.version>
