@@ -8,8 +8,7 @@ on:
   push:
     branches:
       - main
-# test2
-
+# test3
 jobs:
   attach-artifact-to-release:
     uses: liquibase/build-logic/.github/workflows/extension-attach-artifact-release.yml@DAT-18547
