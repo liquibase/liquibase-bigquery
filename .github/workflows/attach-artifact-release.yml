@@ -8,8 +8,9 @@ on:
   push:
     branches:
       - main
-
+      
+# test1
 jobs:
   attach-artifact-to-release:
-    uses: liquibase/build-logic/.github/workflows/extension-attach-artifact-release.yml@main
+    uses: liquibase/build-logic/.github/workflows/extension-attach-artifact-release.yml@DAT-18547
     secrets: inherit
