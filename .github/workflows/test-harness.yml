@@ -187,7 +187,7 @@ jobs:
           fail-on-error: false # Set fail-on-error to false to show report even if it has failed tests
 
       - name: Archive Bigquery Database Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bigquery-test-results
           path: target/surefire-reports
