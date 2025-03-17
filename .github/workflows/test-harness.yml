@@ -167,7 +167,7 @@ jobs:
       - name: Archive Bigquery Database Test Results
         uses: actions/upload-artifact@v3
         with:
-          name: bigquery-test-results
+          name: bigquery-test-results-${{ matrix.liquibase-support-level }}
           path: target/surefire-reports
 
       - name: Test Summary
