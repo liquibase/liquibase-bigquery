@@ -9,7 +9,7 @@ import liquibase.executor.ExecutorService;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.jvm.ViewSnapshotGenerator;
-import liquibase.statement.core.RawSqlStatement;
+import liquibase.statement.core.RawParameterizedSqlStatement;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Schema;
 import liquibase.structure.core.View;
@@ -20,17 +20,13 @@ import java.util.Map;
 
 public class BigQueryViewSnapshotGenerator extends ViewSnapshotGenerator {
 
-
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        if (!(database instanceof BigQueryDatabase)) {
+        if (database instanceof BigQueryDatabase) {
+            return super.getPriority(objectType, database) + PRIORITY_DATABASE;
+        } else {
             return PRIORITY_NONE;
         }
-        int priority = super.getPriority(objectType, database);
-        if (priority > PRIORITY_NONE && database instanceof BigQueryDatabase) {
-            priority += PRIORITY_DATABASE;
-        }
-        return priority;
     }
 
 
@@ -44,12 +40,12 @@ public class BigQueryViewSnapshotGenerator extends ViewSnapshotGenerator {
             Schema schema = example.getSchema();
 
             CatalogAndSchema catalogAndSchema = (new CatalogAndSchema(schema.getCatalogName(), schema.getName())).customize(database);
-            String jdbcSchemaName = database.correctObjectName(((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema), Schema.class);
-            String query = String.format("SELECT view_definition FROM %s.%s.VIEWS WHERE table_name='%s' AND table_schema='%s' AND table_catalog='%s';",
-                    jdbcSchemaName, database.getSystemSchema().toUpperCase(), example.getName(), schema.getName(), schema.getCatalogName());
+            String jdbcSchemaName = database.escapeObjectName(((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema), Schema.class);
+            String query = String.format("SELECT view_definition FROM %s.INFORMATION_SCHEMA.VIEWS WHERE table_name=? AND table_schema=? AND " +
+                            "table_catalog=?", jdbcSchemaName);
 
             List<Map<String, ?>> viewsMetadataRs = Scope.getCurrentScope().getSingleton(ExecutorService.class)
-                    .getExecutor("jdbc", database).queryForList(new RawSqlStatement(query));
+                    .getExecutor("jdbc", database).queryForList(new RawParameterizedSqlStatement(query, example.getName(), schema.getName(), schema.getCatalogName()));
 
             if (viewsMetadataRs.isEmpty()) {
                 return null;

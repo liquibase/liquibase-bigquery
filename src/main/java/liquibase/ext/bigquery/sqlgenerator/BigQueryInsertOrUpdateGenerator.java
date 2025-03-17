@@ -11,8 +11,6 @@ import org.apache.commons.lang3.StringUtils;
 
 
 public class BigQueryInsertOrUpdateGenerator extends InsertOrUpdateGenerator {
-    public BigQueryInsertOrUpdateGenerator() {
-    }
 
     @Override
     public boolean supports(InsertOrUpdateStatement statement, Database database) {
