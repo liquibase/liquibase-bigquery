@@ -17,8 +17,6 @@ import liquibase.servicelocator.PrioritizedService;
         aliases = { "varchar", "clob", "java.lang.String" }
 )
 public class StringDataTypeBigQuery extends VarcharType {
-    public StringDataTypeBigQuery() {
-    }
 
     @Override
     public boolean supports(Database database) {
@@ -28,19 +26,19 @@ public class StringDataTypeBigQuery extends VarcharType {
     @Override
     public DatabaseDataType toDatabaseDataType(Database database) {
         if (database instanceof BigQueryDatabase) {
-
-            DatabaseDataType type = new DatabaseDataType("STRING", this.getParameters());
+            String dataTypeString = "STRING";
+            DatabaseDataType type = new DatabaseDataType(dataTypeString, this.getParameters());
             if (this.getParameters().length == 0) {
-                type.setType("STRING");
+                type.setType(dataTypeString);
             } else {
                 String firstParameter = String.valueOf(this.getParameters()[0]);
                 try {
                     int stringSize = Integer.parseInt(firstParameter);
                     if (stringSize == 65535) {
-                     type.setType("STRING");
+                     type.setType(dataTypeString);
                     }
                 } catch (NumberFormatException e) {
-                    type.setType("STRING");
+                    type.setType(dataTypeString);
                 }
             }
             return type;

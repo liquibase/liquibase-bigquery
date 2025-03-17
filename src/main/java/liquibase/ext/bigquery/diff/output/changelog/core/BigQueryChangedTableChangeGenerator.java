@@ -15,15 +15,16 @@ import liquibase.structure.core.Table;
 
 public class BigQueryChangedTableChangeGenerator extends ChangedTableChangeGenerator {
 
-    public BigQueryChangedTableChangeGenerator() {
-    }
-
     @Override
     public int getPriority(Class<? extends DatabaseObject> objectType, Database database) {
-        int priority = super.getPriority(objectType, database);
-        if (database instanceof BigQueryDatabase) {
-            priority += PRIORITY_DATABASE;
+        if (! (database instanceof BigQueryDatabase)) {
+            return PRIORITY_NONE;
         }
+        int priority = super.getPriority(objectType, database);
+        if (priority == PRIORITY_NONE) {
+            return priority;
+        }
+        priority += PRIORITY_DATABASE;
         return priority;
     }
 
@@ -50,7 +51,7 @@ public class BigQueryChangedTableChangeGenerator extends ChangedTableChangeGener
                 Scope.getCurrentScope().getLog(this.getClass()).warning("A change of the tablespace was detected, however, Liquibase does not currently generate statements to move a table between tablespaces.");
             }
 
-            return null;
+            return new Change[0];
         }
     }
 

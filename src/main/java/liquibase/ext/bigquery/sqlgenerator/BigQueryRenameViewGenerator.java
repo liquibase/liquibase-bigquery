@@ -13,8 +13,6 @@ import static liquibase.ext.bigquery.database.BigQueryDatabase.BIGQUERY_PRIORITY
 
 public class BigQueryRenameViewGenerator extends RenameViewGenerator {
 
-    public BigQueryRenameViewGenerator(){}
-
     @Override
     public int getPriority() {
         return BIGQUERY_PRIORITY_DATABASE;
@@ -28,6 +26,9 @@ public class BigQueryRenameViewGenerator extends RenameViewGenerator {
 
     @Override
     public Sql[] generateSql(RenameViewStatement statement, Database database, SqlGeneratorChain sqlGeneratorChain) {
-        return new Sql[]{new UnparsedSql("ALTER VIEW " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getOldViewName()) + " RENAME TO " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getNewViewName()), new DatabaseObject[]{this.getAffectedOldView(statement), this.getAffectedNewView(statement)})};
+        return new Sql[]{
+                new UnparsedSql("ALTER VIEW " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getOldViewName())
+                        + " RENAME TO " + database.escapeTableName(statement.getCatalogName(), statement.getSchemaName(), statement.getNewViewName()),
+                this.getAffectedOldView(statement), this.getAffectedNewView(statement))};
     }
 }

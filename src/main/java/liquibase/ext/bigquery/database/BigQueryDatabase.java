@@ -11,11 +11,10 @@ import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
 import liquibase.statement.core.GetViewDefinitionStatement;
 import liquibase.structure.DatabaseObject;
-import liquibase.structure.core.Catalog;
-import liquibase.structure.core.Schema;
-import liquibase.structure.core.Sequence;
-import liquibase.structure.core.Table;
+import liquibase.structure.core.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -52,11 +51,6 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     @Override
     public int getPriority() {
         return BIGQUERY_PRIORITY_DATABASE;
-    }
-
-    @Override
-    public boolean supportsDatabaseChangeLogHistory() {
-        return true;
     }
 
     @Override
@@ -101,8 +95,66 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
     }
 
     @Override
+    protected String getQuotingStartCharacter() {
+        return "`";
+    }
+
+    @Override
+    protected String getQuotingEndCharacter() {
+        return "`";
+    }
+
+    @Override
+    public boolean isCorrectDatabaseImplementation(DatabaseConnection conn) throws DatabaseException {
+        return PRODUCT_NAME.trim().equalsIgnoreCase(conn.getDatabaseProductName().trim());
+    }
+    @Override
+    public String escapeObjectName(String objectName, Class<? extends DatabaseObject> objectType) {
+        if (objectType.equals(Schema.class)) {
+            return objectName;
+        }
+        return super.escapeObjectName(objectName, objectType);
+    }
+
+    @Override
+    public String getDefaultDriver(String url) {
+        if (url.startsWith("jdbc:bigquery")) {
+            return "com.simba.googlebigquery.jdbc.Driver";
+        }
+
+        return null;
+    }
+    @Override
+    public boolean supportsDatabaseChangeLogHistory() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsSequences() {
+        return this.supports(Sequence.class);
+    }
+
+    @Override
+    public boolean supportsRestrictForeignKeys() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsNotNullConstraintNames() {
+        return false;
+    }
+
+    @Override
+    public boolean supportsPrimaryKeyNames() {
+        return false;
+    }
+
+    @Override
     public boolean supports(Class<? extends DatabaseObject> object) {
         if (Sequence.class.isAssignableFrom(object)) {
+            return false;
+        }
+        if (UniqueConstraint.class.isAssignableFrom(object)) {
             return false;
         }
         return super.supports(object);
@@ -120,57 +172,6 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
 
     @Override
     public boolean supportsTablespaces() {
-        return false;
-    }
-
-    @Override
-    protected String getQuotingStartCharacter() {
-        return "`";
-    }
-
-    @Override
-    protected String getQuotingEndCharacter() {
-        return "`";
-    }
-
-    @Override
-    public boolean isCorrectDatabaseImplementation(DatabaseConnection conn) throws DatabaseException {
-        return PRODUCT_NAME.trim().equalsIgnoreCase(conn.getDatabaseProductName().trim());
-    }
-    @Override
-    public String escapeObjectName(String objectName, Class<? extends DatabaseObject> objectType) {
-        if (objectType.equals(Schema.class) || objectType.equals(Catalog.class)) {
-            return objectName;
-        }
-        return super.escapeObjectName(objectName, objectType);
-    }
-
-    @Override
-    public String getDefaultDriver(String url) {
-        if (url.startsWith("jdbc:bigquery")) {
-            return "com.simba.googlebigquery.jdbc.Driver";
-        }
-
-        return null;
-    }
-
-    @Override
-    public boolean supportsSequences() {
-        return this.supports(Sequence.class);
-    }
-
-    @Override
-    public boolean supportsRestrictForeignKeys() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsPrimaryKeyNames() {
-        return false;
-    }
-
-    @Override
-    public boolean supportsNotNullConstraintNames() {
         return false;
     }
 
@@ -359,5 +360,24 @@ public class BigQueryDatabase extends AbstractJdbcDatabase {
         reservedWords.add("WITHIN");
 
         return reservedWords;
+    }
+
+    @Override
+    public void checkDatabaseConnection() throws DatabaseException {
+        BigQueryConnection connection = (BigQueryConnection) getConnection();
+        try {
+            String catalogName = getConnectionCatalogName();
+            String schemaName = getConnectionSchemaName();
+            ResultSet schemasAlikeUsed = connection.getMetaData().getSchemas(catalogName, schemaName);
+            while (schemasAlikeUsed.next()) {
+                if (schemasAlikeUsed.getString(1).equals(schemaName)) {
+                    return;
+                }
+            }
+            throw new DatabaseException(String.format("Please specify existing dataset in connection url. " +
+                    "Current connection points to '%s.%s'", catalogName, schemaName));
+        } catch (SQLException e) {
+            Scope.getCurrentScope().getLog(getClass()).info("Error checking database connection", e);
+        }
     }
 }

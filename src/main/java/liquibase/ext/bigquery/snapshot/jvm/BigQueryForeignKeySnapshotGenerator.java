@@ -40,7 +40,6 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
         String fkFullName = searchTableName + "." + example.getName();
         String searchCatalog = ((AbstractJdbcDatabase) database).getJdbcCatalogName(fkTable.getSchema());
         String searchSchema = ((AbstractJdbcDatabase) database).getJdbcSchemaName(fkTable.getSchema());
-        String systemSchema = database.getSystemSchema().toUpperCase();
 
         String query = new StringBuilder("SELECT ")
                 .append("TC.CONSTRAINT_NAME as CONSTRAINT_NAME, ")
@@ -52,9 +51,9 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
                 .append("CCU.TABLE_SCHEMA as PRIMARY_KEY_TABLE_SCHEMA, ")
                 .append("CCU.TABLE_NAME as PRIMARY_KEY_TABLE, ")
                 .append("CCU.COLUMN_NAME as PRIMARY_KEY_COLUMN ")
-                .append(String.format("FROM %1$s.%2$s.TABLE_CONSTRAINTS as TC JOIN %1$s.%2$s.CONSTRAINT_COLUMN_USAGE as CCU on " +
-                                "TC.CONSTRAINT_NAME=CCU.CONSTRAINT_NAME JOIN %1$s.%2$s.KEY_COLUMN_USAGE as KCU on KCU.CONSTRAINT_NAME=TC.CONSTRAINT_NAME ",
-                        searchSchema, systemSchema))
+                .append(String.format("FROM %1$s.INFORMATION_SCHEMA.TABLE_CONSTRAINTS as TC JOIN %1$s.INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE as CCU on " +
+                                "TC.CONSTRAINT_NAME=CCU.CONSTRAINT_NAME JOIN %1$s.INFORMATION_SCHEMA.KEY_COLUMN_USAGE as KCU on KCU.CONSTRAINT_NAME=TC.CONSTRAINT_NAME ",
+                        database.escapeObjectName(searchSchema, Schema.class)))
                 .append("WHERE TC.TABLE_NAME=? AND TC.TABLE_SCHEMA=? AND TC.TABLE_CATALOG=? AND TC.CONSTRAINT_TYPE='FOREIGN KEY' AND TC.CONSTRAINT_NAME=?")
                 .toString();
         List<Map<String, ?>> results = Scope.getCurrentScope().getSingleton(ExecutorService.class)
@@ -113,13 +112,10 @@ public class BigQueryForeignKeySnapshotGenerator extends ForeignKeySnapshotGener
             Database database = snapshot.getDatabase();
             Schema schema = table.getSchema();
 
-            CatalogAndSchema catalogAndSchema = (new CatalogAndSchema(schema.getCatalogName(), schema.getName())).customize(database);
-            String jdbcSchemaName = database.correctObjectName(((AbstractJdbcDatabase) database).getJdbcSchemaName(catalogAndSchema), Schema.class);
-            String query = String.format("SELECT CONSTRAINT_NAME FROM %s.%s.TABLE_CONSTRAINTS WHERE TABLE_NAME=? AND TABLE_SCHEMA=? AND TABLE_CATALOG=? AND " +
-                    "CONSTRAINT_TYPE='FOREIGN KEY';", jdbcSchemaName, database.getSystemSchema().toUpperCase());
+            String query = String.format("SELECT CONSTRAINT_NAME FROM %s.%s.INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME=? AND CONSTRAINT_TYPE='FOREIGN KEY';",
+                    database.escapeObjectName(schema.getCatalogName(), Catalog.class), schema.getName());
             List<Map<String, ?>> tableConstraints = Scope.getCurrentScope().getSingleton(ExecutorService.class)
-                    .getExecutor("jdbc", database).queryForList(new RawParameterizedSqlStatement(query, table.getName(), schema.getName(),
-                            schema.getCatalogName()));
+                    .getExecutor("jdbc", database).queryForList(new RawParameterizedSqlStatement(query, table.getName()));
             for (Map<String, ?> row : tableConstraints) {
                 String foreignKeyName = Objects.toString(row.get("CONSTRAINT_NAME"));
                 ForeignKey fk = new ForeignKey()

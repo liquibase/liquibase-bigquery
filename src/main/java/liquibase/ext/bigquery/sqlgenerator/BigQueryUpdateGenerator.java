@@ -16,10 +16,6 @@ import java.util.Date;
 
 public class BigQueryUpdateGenerator extends UpdateGenerator {
 
-    public BigQueryUpdateGenerator() {
-        super();
-    }
-
     @Override
     public int getPriority() {
         return PRIORITY_DATABASE;

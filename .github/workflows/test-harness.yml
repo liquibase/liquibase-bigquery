@@ -1,6 +1,6 @@
 name: Liquibase Test Harness for BigQuery
 on:
-  pull_request:
+  pull_request_target:
     branches:
       - '*'
   push:
@@ -14,8 +14,20 @@ on:
 env:
   tf_version: 'latest'
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
+
+  authorize:
+    environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && 'external' || 'internal' }}
+    runs-on: ubuntu-latest
+    steps:
+      - run: true
+
   setup:
+    needs: authorize
     runs-on: ubuntu-latest
     permissions:
       contents: 'read'
@@ -33,6 +45,14 @@ jobs:
         working-directory: src/test/resources/terraform
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+          terraform_wrapper: false
 
       # This action will queue the workflow if another workflow is already running
       - uses: ahmadnassri/action-workflow-queue@v1
@@ -99,6 +119,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
         #look for dependencies in maven
       - name: maven-settings-xml-action
@@ -156,7 +178,7 @@ jobs:
           mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
 
       - name: Test Reporter # Generate a test report using the Test Reporter action
-        uses: dorny/test-reporter@v1.9.0
+        uses: dorny/test-reporter@v1.9.1
         if: always() # Run the action even if the previous steps fail
         with:
           name: Liquibase Test Harness - ${{ matrix.liquibase-support-level }} Reports # Set the name of the test report
@@ -165,7 +187,7 @@ jobs:
           fail-on-error: false # Set fail-on-error to false to show report even if it has failed tests
 
       - name: Archive Bigquery Database Test Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bigquery-test-results-${{ matrix.liquibase-support-level }}
           path: target/surefire-reports
@@ -203,6 +225,12 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.5.7"
+          terraform_wrapper: false
 
       - name: set GCP project
         id: config_project

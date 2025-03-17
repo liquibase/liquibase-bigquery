@@ -6,7 +6,8 @@ CREATE TABLE authors (
     last_name STRING NOT NULL,
     email STRING NOT NULL,
     birthdate DATE NOT NULL,
-    added TIMESTAMP NOT NULL
+    added TIMESTAMP NOT NULL,
+    PRIMARY KEY (id) NOT ENFORCED
 );
 
 INSERT INTO authors VALUES (1,'Eileen','Lubowitz','ppaucek@example.org','1991-03-04','2004-05-30 02:08:25');
