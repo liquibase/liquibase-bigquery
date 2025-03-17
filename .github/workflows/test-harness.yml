@@ -182,7 +182,7 @@ jobs:
         if: always() # Run the action even if the previous steps fail
         with:
           name: Liquibase Test Harness - ${{ matrix.liquibase-support-level }} Reports # Set the name of the test report
-          path: target/surefire-reports/TEST-*.xml # Set the path to the test report files
+          path: target/surefire-reports/TEST-${{ matrix.liquibase-support-level }}.xml # Set the path to the test report files
           reporter: java-junit # Set the reporter to use
           fail-on-error: false # Set fail-on-error to false to show report even if it has failed tests
 
