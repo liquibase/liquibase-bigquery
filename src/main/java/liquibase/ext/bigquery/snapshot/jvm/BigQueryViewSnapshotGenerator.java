@@ -8,6 +8,7 @@ import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
+import liquibase.snapshot.SnapshotGenerator;
 import liquibase.snapshot.jvm.ViewSnapshotGenerator;
 import liquibase.statement.core.RawParameterizedSqlStatement;
 import liquibase.structure.DatabaseObject;
@@ -85,4 +86,8 @@ public class BigQueryViewSnapshotGenerator extends ViewSnapshotGenerator {
         }
     }
 
+    @Override
+    public Class<? extends SnapshotGenerator>[] replaces() {
+        return new Class[]{ViewSnapshotGenerator.class};
+    }
 }
