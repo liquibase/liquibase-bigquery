@@ -189,7 +189,7 @@ jobs:
       - name: Archive Bigquery Database Test Results
         uses: actions/upload-artifact@v4
         with:
-          name: bigquery-test-results-${{ strategy.job-index }}
+          name: test-name
           path: target/surefire-reports
 
       - name: Test Summary
