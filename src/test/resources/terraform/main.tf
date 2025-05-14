@@ -11,9 +11,9 @@ module "bigquery" {
   project_id                 = "testharnesstests"
   location                   = "US" # Update location if needed
   delete_contents_on_destroy = true
-  dataset_labels             = {
+  dataset_labels = {
     project_id = "testharnesstests"
-    }
+  }
 }
 
 
