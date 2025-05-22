@@ -1,18 +1,17 @@
 name: Attach Artifact to Release
 
-permissions:
-  contents: write
-  actions: read
-  packages: write
-
 on:
-  workflow_dispatch:
   pull_request:
     types:
       - closed
   push:
     branches:
       - main
+
+permissions:
+  contents: write
+  actions: read
+  packages: write
 
 jobs:
   attach-artifact-to-release:
