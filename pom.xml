@@ -19,7 +19,7 @@
     <properties>
         <liquibase.version>4.32.0</liquibase.version>
         <sonar.tests>src/test/groovy</sonar.tests>
-        <junit.version>5.12.2</junit.version>
+        <junit.version>5.13.0</junit.version>
         <junit-platform.version>1.13.0</junit-platform.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <liquibase-test-harness.version>1.0.10</liquibase-test-harness.version>
