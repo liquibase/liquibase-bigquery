@@ -1,7 +1,6 @@
 name: Build and Test
 
 on:
-  workflow_dispatch:
   pull_request_target:
     types:
       - opened
@@ -11,9 +10,9 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: read
 
 jobs:
-
   authorize:
     environment: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.repository && 'external' || 'internal' }}
     runs-on: ubuntu-latest
@@ -24,6 +23,8 @@ jobs:
     needs: authorize
     uses: liquibase/build-logic/.github/workflows/os-extension-test.yml@main
     secrets: inherit
-    with:
-      os: '["ubuntu-latest"]'
-      java: "[11, 17, 21]"
+
+  dependabot:
+    needs: build-test
+    uses: liquibase/build-logic/.github/workflows/dependabot-automerge.yml@main
+    secrets: inherit

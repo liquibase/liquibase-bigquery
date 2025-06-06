@@ -156,12 +156,12 @@ jobs:
               {
                 "id": "liquibase-pro",
                 "username": "liquibot",
-                "password": "${{ secrets.LIQUIBOT_PAT }}"
+                "password": "${{ secrets.LIQUIBOT_PAT_GPM_ACCESS }}"
               },
               {
                 "id": "liquibase",
                 "username": "liquibot",
-                "password": "${{ secrets.LIQUIBOT_PAT }}"
+                "password": "${{ secrets.LIQUIBOT_PAT_GPM_ACCESS }}"
               }
             ]
 
@@ -178,7 +178,7 @@ jobs:
           mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
 
       - name: Test Reporter # Generate a test report using the Test Reporter action
-        uses: dorny/test-reporter@v1.9.1
+        uses: dorny/test-reporter@v2.1.0
         if: always() # Run the action even if the previous steps fail
         with:
           name: Liquibase Test Harness - ${{ matrix.liquibase-support-level }} Reports # Set the name of the test report
@@ -186,10 +186,15 @@ jobs:
           reporter: java-junit # Set the reporter to use
           fail-on-error: false # Set fail-on-error to false to show report even if it has failed tests
 
+      - name: Debug Matrix Value
+        run: |
+          echo "Matrix level: ${{ matrix['liquibase-support-level'] }}"
+          echo "Artifact name will be: bigquery-test-results-${{ matrix['liquibase-support-level'] }}"
+
       - name: Archive Bigquery Database Test Results
         uses: actions/upload-artifact@v4
         with:
-          name: bigquery-test-results
+          name: bigquery-test-results-${{ matrix['liquibase-support-level'] }}
           path: target/surefire-reports
 
       - name: Test Summary

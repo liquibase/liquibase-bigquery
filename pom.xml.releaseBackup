@@ -10,7 +10,7 @@
 
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-bigquery</artifactId>
-    <version>4.33.0-SNAPSHOT</version>
+    <version>4.32.0-SNAPSHOT</version>
 
     <name>Liquibase Extension Google BigQuery support</name>
     <description>Add this Liquibase extension to your project to support Google BigQuery</description>
@@ -19,8 +19,8 @@
     <properties>
         <liquibase.version>4.32.0</liquibase.version>
         <sonar.tests>src/test/groovy</sonar.tests>
-        <junit.version>5.12.2</junit.version>
-        <junit-platform.version>1.13.0</junit-platform.version>
+        <junit.version>5.12.0</junit.version>
+        <junit-platform.version>1.12.0</junit-platform.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <liquibase-test-harness.version>1.0.10</liquibase-test-harness.version>
         <jacoco.fileset.directory>target</jacoco.fileset.directory>
@@ -52,7 +52,7 @@
             <dependency>
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
-                <version>26.59.0</version>
+                <version>26.50.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

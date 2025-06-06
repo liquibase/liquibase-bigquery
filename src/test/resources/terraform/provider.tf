@@ -14,15 +14,15 @@ terraform {
       version = "~> 4.0"
     }
     spacelift = {
-          source = "spacelift-io/spacelift"
-        }
+      source = "spacelift-io/spacelift"
+    }
   }
 }
 
 provider "google" {
-  alias       = "impersonate_service_account"
-  project     = "testharnesstests"
-  region      = "us-east1"
+  alias                       = "impersonate_service_account"
+  project                     = "testharnesstests"
+  region                      = "us-east1"
   impersonate_service_account = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
 }
 
