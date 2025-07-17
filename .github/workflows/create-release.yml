@@ -13,6 +13,7 @@ permissions:
   statuses: read
   actions: read
   security-events: write
+  id-token: write # Required for AWS OIDC authentication
 
 jobs:
   create-release:
