@@ -13,8 +13,8 @@ permissions:
   statuses: read
   actions: read
   security-events: write
-  # id-token: write # Required for AWS OIDC authentication
-
+  id-token: write
+  
 jobs:
   create-release:
     uses: liquibase/build-logic/.github/workflows/create-release.yml@main
