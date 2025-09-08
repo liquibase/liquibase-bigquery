@@ -146,6 +146,9 @@ jobs:
             ,/vault/liquibase
           parse-json-secrets: true
 
+      - name: Setup Google credentials
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@main
+        
         #look for dependencies in maven
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v22
