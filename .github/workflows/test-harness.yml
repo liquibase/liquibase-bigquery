@@ -189,12 +189,6 @@ jobs:
               }
             ]
 
-      - name: configure auth
-        id: auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
-
       - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ env.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
@@ -266,12 +260,6 @@ jobs:
           SPACELIFT_API_KEY_ENDPOINT: ${{ env.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ env.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ env.SPACELIFT_API_KEY_SECRET }}
-
-      - name: configure auth
-        id: auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
