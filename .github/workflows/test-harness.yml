@@ -78,6 +78,12 @@ jobs:
           timeout: 3000000 # 30 minutes
           delay: 300000 # 5 minutes
 
+      - name: configure auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
+
       - name: set GCP project
         id: config_project
         run: gcloud config set project testharnesstests
@@ -105,13 +111,11 @@ jobs:
         run: |
           spacectl stack local-preview --id liquibase-bigquery-testharness-tests > ${GITHUB_WORKSPACE}/plan.out
           cat ${GITHUB_WORKSPACE}/plan.out
-
       - name: Deploy infrastructure
         #if: ${{ github.event_name == 'push' }}
         run: |
           spacectl stack set-current-commit --id liquibase-bigquery-testharness-tests --sha ${{ github.sha }}
           spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm 
-
   test:
     name: Run Test Harness
     runs-on: ubuntu-latest
@@ -146,9 +150,6 @@ jobs:
             ,/vault/liquibase
           parse-json-secrets: true
 
-      - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@main
-        
         #look for dependencies in maven
       - name: maven-settings-xml-action
         uses: whelk-io/maven-settings-xml-action@v22
@@ -191,13 +192,17 @@ jobs:
                 "password": "${{ env.LIQUIBOT_PAT_GPM_ACCESS }}"
               }
             ]
+      - name: configure auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
 
       - name: Run ${{ matrix.liquibase-support-level }} Liquibase Test Harness # Run the Liquibase test harness at each test level
         env:
           LIQUIBASE_PRO_LICENSE_KEY: ${{ env.PRO_LICENSE_KEY }} # Set the environment variable for the Liquibase Pro license key
         run: |
           mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
-
       - name: Test Reporter # Generate a test report using the Test Reporter action
         uses: dorny/test-reporter@v2.1.1
         if: always() # Run the action even if the previous steps fail
@@ -211,7 +216,6 @@ jobs:
         run: |
           echo "Matrix level: ${{ matrix['liquibase-support-level'] }}"
           echo "Artifact name will be: bigquery-test-results-${{ matrix['liquibase-support-level'] }}"
-
       - name: Archive Bigquery Database Test Results
         uses: actions/upload-artifact@v4
         with:
@@ -263,6 +267,12 @@ jobs:
           SPACELIFT_API_KEY_ENDPOINT: ${{ env.SPACELIFT_API_KEY_ENDPOINT }}
           SPACELIFT_API_KEY_ID: ${{ env.SPACELIFT_API_KEY_ID }}
           SPACELIFT_API_KEY_SECRET: ${{ env.SPACELIFT_API_KEY_SECRET }}
+
+      - name: configure auth
+        id: auth
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
