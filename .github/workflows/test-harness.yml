@@ -78,12 +78,6 @@ jobs:
           timeout: 3000000 # 30 minutes
           delay: 300000 # 5 minutes
 
-      - name: configure auth
-        id: auth
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: ${{ env.GOOGLE_CREDENTIALS }}
-
       - name: set GCP project
         id: config_project
         run: gcloud config set project testharnesstests
