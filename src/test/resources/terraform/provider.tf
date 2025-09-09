@@ -15,6 +15,7 @@ terraform {
     }
     spacelift = {
       source = "spacelift-io/spacelift"
+      version = "1.27.0"
     }
   }
 }
@@ -24,6 +25,7 @@ provider "google" {
   project                     = "testharnesstests"
   region                      = "us-east1"
   impersonate_service_account = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
+  credentials                 = file("/mnt/workspace/gcp.json")
 }
 
 
