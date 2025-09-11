@@ -9,6 +9,7 @@ import liquibase.exception.DatabaseException;
 import liquibase.ext.bigquery.database.BigQueryDatabase;
 import liquibase.snapshot.DatabaseSnapshot;
 import liquibase.snapshot.InvalidExampleException;
+import liquibase.snapshot.SnapshotGenerator;
 import liquibase.snapshot.jvm.SchemaSnapshotGenerator;
 import liquibase.structure.DatabaseObject;
 import liquibase.structure.core.Catalog;
@@ -29,6 +30,11 @@ public class BigQueryDatasetSnapshotGenerator extends SchemaSnapshotGenerator {
         } else {
             return PRIORITY_NONE;
         }
+    }
+
+    @Override
+    public Class<? extends SnapshotGenerator>[] replaces() {
+        return new Class[]{SchemaSnapshotGenerator.class};
     }
 
     @Override
