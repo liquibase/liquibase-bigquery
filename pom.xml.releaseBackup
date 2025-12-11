@@ -5,22 +5,20 @@
     <parent>
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-parent-pom</artifactId>
-        <version>0.5.8</version>
+        <version>1.0.0</version>
     </parent>
 
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-bigquery</artifactId>
-    <version>4.33.0-SNAPSHOT</version>
+    <version>5.0.1-SNAPSHOT</version>
 
     <name>Liquibase Extension Google BigQuery support</name>
     <description>Add this Liquibase extension to your project to support Google BigQuery</description>
     <url>https://github.com/liquibase/liquibase-bigquery</url>
 
     <properties>
-        <liquibase.version>4.33.0</liquibase.version>
+        <liquibase.version>5.0.1</liquibase.version>
         <sonar.tests>src/test/groovy</sonar.tests>
-        <junit.version>5.13.0</junit.version>
-        <junit-platform.version>1.13.0</junit-platform.version>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <liquibase-test-harness.version>1.0.10</liquibase-test-harness.version>
         <jacoco.fileset.directory>target</jacoco.fileset.directory>
@@ -52,7 +50,7 @@
             <dependency>
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
-                <version>26.59.0</version>
+                <version>26.69.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -94,7 +92,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
+            <version>${jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -112,13 +110,13 @@
         <dependency>
             <groupId>org.junit.vintage</groupId>
             <artifactId>junit-vintage-engine</artifactId>
-            <version>${junit.version}</version>
+            <version>${jupiter.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.version}</version>
+            <version>${jupiter.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -142,7 +140,7 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>4.31.1</version>
+                <version>4.33.0</version>
                 <configuration>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <propertyFile>target/classes/liquibase.properties</propertyFile>
