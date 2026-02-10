@@ -212,7 +212,7 @@ jobs:
           echo "Artifact name will be: bigquery-test-results-${{ matrix['liquibase-support-level'] }}"
 
       - name: Archive Bigquery Database Test Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: bigquery-test-results-${{ matrix['liquibase-support-level'] }}
           path: target/surefire-reports
