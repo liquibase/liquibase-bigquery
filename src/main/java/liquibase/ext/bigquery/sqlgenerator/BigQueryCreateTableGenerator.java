@@ -60,6 +60,7 @@ public class BigQueryCreateTableGenerator extends CreateTableGenerator {
 
             if (columnType != null && !columnType.isAutoIncrement() && statement.getDefaultValue(column) != null) {
                 Object defaultValue = statement.getDefaultValue(column);
+                buffer.append(" DEFAULT ");
 
                 if (defaultValue instanceof DatabaseFunction) {
                     buffer.append(database.generateDatabaseFunctionValue((DatabaseFunction) defaultValue));
