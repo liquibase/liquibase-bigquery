@@ -10,14 +10,14 @@
 
     <groupId>org.liquibase.ext</groupId>
     <artifactId>liquibase-bigquery</artifactId>
-    <version>5.0.1-SNAPSHOT</version>
+    <version>5.0.2-SNAPSHOT</version>
 
     <name>Liquibase Extension Google BigQuery support</name>
     <description>Add this Liquibase extension to your project to support Google BigQuery</description>
     <url>https://github.com/liquibase/liquibase-bigquery</url>
 
     <properties>
-        <liquibase.version>5.0.1</liquibase.version>
+        <liquibase.version>5.0.2</liquibase.version>
         <sonar.tests>src/test/groovy</sonar.tests>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <liquibase-test-harness.version>1.0.10</liquibase-test-harness.version>
@@ -50,7 +50,7 @@
             <dependency>
                 <groupId>com.google.cloud</groupId>
                 <artifactId>libraries-bom</artifactId>
-                <version>26.69.0</version>
+                <version>26.71.0</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -140,7 +140,7 @@
             <plugin>
                 <groupId>org.liquibase</groupId>
                 <artifactId>liquibase-maven-plugin</artifactId>
-                <version>4.33.0</version>
+                <version>5.0.1</version>
                 <configuration>
                     <propertyFileWillOverride>true</propertyFileWillOverride>
                     <propertyFile>target/classes/liquibase.properties</propertyFile>
