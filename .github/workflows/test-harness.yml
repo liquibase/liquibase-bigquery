@@ -36,19 +36,19 @@ jobs:
       run:
         working-directory: src/test/resources/terraform
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
       - name: Configure AWS credentials for vault access
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
           aws-region: us-east-1
 
       - name: Get secrets from vault
         id: vault-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@3a411b6ec5cace3d626412dd917e7bfeac242cfa # v3.0.0
         with:
           secret-ids: |
             ,/vault/liquibase
@@ -58,7 +58,7 @@ jobs:
         uses: liquibase/build-logic/.github/actions/setup-google-credentials@main
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@main
+        uses: spacelift-io/setup-spacectl@d0e2c81467c31a68af60db5b1f9f1f54f79cab96 # v2.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SPACELIFT_API_KEY_ENDPOINT: ${{ env.SPACELIFT_API_KEY_ENDPOINT }}
@@ -66,7 +66,7 @@ jobs:
           SPACELIFT_API_KEY_SECRET: ${{ env.SPACELIFT_API_KEY_SECRET }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
         with:
           terraform_version: "1.5.7"
           terraform_wrapper: false
@@ -82,7 +82,7 @@ jobs:
         run: gcloud config set project testharnesstests
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@main
+        uses: spacelift-io/setup-spacectl@d0e2c81467c31a68af60db5b1f9f1f54f79cab96 # v2.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -127,19 +127,19 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ github.event.pull_request.head.sha || github.ref }}
 
       - name: Configure AWS credentials for vault access
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
           aws-region: us-east-1
 
       - name: Get secrets from vault
         id: vault-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@3a411b6ec5cace3d626412dd917e7bfeac242cfa # v3.0.0
         with:
           secret-ids: |
             ,/vault/liquibase
@@ -150,7 +150,7 @@ jobs:
 
         #look for dependencies in maven
       - name: maven-settings-xml-action
-        uses: whelk-io/maven-settings-xml-action@v22
+        uses: whelk-io/maven-settings-xml-action@9dc09b23833fa9aa7f27b63db287951856f3433d # v22
         with:
           repositories: |
             [
@@ -198,7 +198,7 @@ jobs:
           mvn -Dtest=liquibase.ext.bigquery.${{ matrix.liquibase-support-level }}HarnessSuiteIT test # Run the Liquibase test harness at each test level
 
       - name: Test Reporter # Generate a test report using the Test Reporter action
-        uses: dorny/test-reporter@v2.6.0
+        uses: dorny/test-reporter@a43b3a5f7366b97d083190328d2c652e1a8b6aa2 # v3.0.0
         if: always() # Run the action even if the previous steps fail
         with:
           name: Liquibase Test Harness - ${{ matrix.liquibase-support-level }} Reports # Set the name of the test report
@@ -212,13 +212,13 @@ jobs:
           echo "Artifact name will be: bigquery-test-results-${{ matrix['liquibase-support-level'] }}"
 
       - name: Archive Bigquery Database Test Results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: bigquery-test-results-${{ matrix['liquibase-support-level'] }}
           path: target/surefire-reports
 
       - name: Test Summary
-        uses: test-summary/action@v2
+        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2.4
         with:
           paths: "target/surefire-reports/**/TEST-*.xml"
         if: always()
@@ -236,16 +236,16 @@ jobs:
       id-token: "write"
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - name: Configure AWS credentials for vault access
-        uses: aws-actions/configure-aws-credentials@v6
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
         with:
           role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
           aws-region: us-east-1
 
       - name: Get secrets from vault
         id: vault-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        uses: aws-actions/aws-secretsmanager-get-secrets@3a411b6ec5cace3d626412dd917e7bfeac242cfa # v3.0.0
         with:
           secret-ids: |
             ,/vault/liquibase
@@ -255,7 +255,7 @@ jobs:
         uses: liquibase/build-logic/.github/actions/setup-google-credentials@main
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@main
+        uses: spacelift-io/setup-spacectl@d0e2c81467c31a68af60db5b1f9f1f54f79cab96 # v2.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SPACELIFT_API_KEY_ENDPOINT: ${{ env.SPACELIFT_API_KEY_ENDPOINT }}
@@ -263,7 +263,7 @@ jobs:
           SPACELIFT_API_KEY_SECRET: ${{ env.SPACELIFT_API_KEY_SECRET }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@5e8dbf3c6d9deaf4193ca7a8fb23f2ac83bb6c85 # v4.0.0
         with:
           terraform_version: "1.5.7"
           terraform_wrapper: false
@@ -273,7 +273,7 @@ jobs:
         run: gcloud config set project testharnesstests
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@main
+        uses: spacelift-io/setup-spacectl@d0e2c81467c31a68af60db5b1f9f1f54f79cab96 # v2.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
