@@ -72,7 +72,7 @@ jobs:
           terraform_wrapper: false
 
       # This action will queue the workflow if another workflow is already running
-      - uses: ahmadnassri/action-workflow-queue@v1
+      - uses: ahmadnassri/action-workflow-queue@542658b3a8270cac81ae15d401b0d974732808ac # v1.2.0
         with:
           timeout: 3000000 # 30 minutes
           delay: 300000 # 5 minutes
