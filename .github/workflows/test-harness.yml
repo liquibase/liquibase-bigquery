@@ -58,7 +58,7 @@ jobs:
         uses: liquibase/build-logic/.github/actions/setup-google-credentials@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@8c1f751eb49902d22ab59c9d41211a9d5fa84499 # v2.2.0
+        uses: spacelift-io/setup-spacectl@7ca28b2af27d40aaaad7c787337b71b7703a0df7 # v2.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SPACELIFT_API_KEY_ENDPOINT: ${{ env.SPACELIFT_API_KEY_ENDPOINT }}
@@ -82,7 +82,7 @@ jobs:
         run: gcloud config set project testharnesstests
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@8c1f751eb49902d22ab59c9d41211a9d5fa84499 # v2.2.0
+        uses: spacelift-io/setup-spacectl@7ca28b2af27d40aaaad7c787337b71b7703a0df7 # v2.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -219,7 +219,7 @@ jobs:
         uses: liquibase/build-logic/.github/actions/setup-google-credentials@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@8c1f751eb49902d22ab59c9d41211a9d5fa84499 # v2.2.0
+        uses: spacelift-io/setup-spacectl@7ca28b2af27d40aaaad7c787337b71b7703a0df7 # v2.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SPACELIFT_API_KEY_ENDPOINT: ${{ env.SPACELIFT_API_KEY_ENDPOINT }}
@@ -237,7 +237,7 @@ jobs:
         run: gcloud config set project testharnesstests
 
       - name: Install spacectl
-        uses: spacelift-io/setup-spacectl@8c1f751eb49902d22ab59c9d41211a9d5fa84499 # v2.2.0
+        uses: spacelift-io/setup-spacectl@7ca28b2af27d40aaaad7c787337b71b7703a0df7 # v2.3.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
