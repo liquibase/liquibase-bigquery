@@ -55,7 +55,7 @@ jobs:
           parse-json-secrets: true
 
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@4d26b956b2d24b504ca03667655211c078ee4d6c # main
 
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@7ca28b2af27d40aaaad7c787337b71b7703a0df7 # v2.3.0
@@ -146,11 +146,11 @@ jobs:
           parse-json-secrets: true
 
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@4d26b956b2d24b504ca03667655211c078ee4d6c # main
 
         #look for dependencies in maven
       - name: Set up Maven settings.xml
-        uses: liquibase/build-logic/.github/actions/setup-maven-settings@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
+        uses: liquibase/build-logic/.github/actions/setup-maven-settings@4d26b956b2d24b504ca03667655211c078ee4d6c # main
         with:
           gpm-token: ${{ env.LIQUIBOT_PAT_GPM_ACCESS }}
           releases-enabled: 'false'
@@ -216,7 +216,7 @@ jobs:
           parse-json-secrets: true
 
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@2660ba32055efd3301bcf624a3d60ca8b11cc482 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@4d26b956b2d24b504ca03667655211c078ee4d6c # main
 
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@7ca28b2af27d40aaaad7c787337b71b7703a0df7 # v2.3.0
