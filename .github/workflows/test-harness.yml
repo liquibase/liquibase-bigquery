@@ -9,6 +9,8 @@ on:
       - "master"
     paths:
       - "src/test/resources/terraform/**"
+      # Fork PRs skip the harness, so code merged from a fork is harness-tested on main.
+      - "src/main/**"
   workflow_dispatch:
 
 env:
