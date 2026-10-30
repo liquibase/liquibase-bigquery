@@ -6,6 +6,10 @@ on:
       - opened
       - reopened
       - synchronize
+  # Fork PRs skip FOSSA, so code merged from a fork is scanned on main.
+  push:
+    branches:
+      - main
 
 jobs:
   fossa:
