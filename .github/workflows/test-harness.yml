@@ -35,22 +35,30 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Configure AWS credentials for vault access
+      - name: Get the Google impersonation account from vault
+        uses: liquibase/build-logic/.github/actions/setup-aws-vault@2003fece51886ec69cda3df1cb4520b3ceeb2e0c # main
+        with:
+          group: google-impersonate-service-account
+          role-arn: ${{ secrets.VAULT_GROUPED_GOOGLE_IMPERSONATE_SERVICE_ACCOUNT_ROLE_ARN }}
+
+      - name: Get the Spacelift API key from vault
+        uses: liquibase/build-logic/.github/actions/setup-aws-vault@2003fece51886ec69cda3df1cb4520b3ceeb2e0c # main
+        with:
+          group: spacelift
+          role-arn: ${{ secrets.VAULT_GROUPED_SPACELIFT_ROLE_ARN }}
+
+      # setup-google-credentials reads GOOGLE_CREDENTIALS with the last role assumed; keep this one last.
+      - name: Configure AWS credentials for google-credentials
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
+          role-to-assume: ${{ secrets.VAULT_GROUPED_GOOGLE_CREDENTIALS_ROLE_ARN }}
           aws-region: us-east-1
 
-      - name: Get secrets from vault
-        id: vault-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
-        with:
-          secret-ids: |
-            ,/vault/liquibase
-          parse-json-secrets: true
-
+      # 7cb4fce masks GOOGLE_CREDENTIALS, which the grouped read no longer masks for it.
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@5ac918e7d6ab07f75e2a0a26261577f9c5df15d4 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@7cb4fceb544f2d0bebda1bc3560d316ac9c33237 # main
+        with:
+          vault-secret-id: /vault/grouped/google-credentials
 
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@91d4b113113fbf62f1f673ab7459a521a9766a3a # v2.6.0
@@ -124,22 +132,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - name: Configure AWS credentials for vault access
+      - name: Get the Google impersonation account from vault
+        uses: liquibase/build-logic/.github/actions/setup-aws-vault@2003fece51886ec69cda3df1cb4520b3ceeb2e0c # main
+        with:
+          group: google-impersonate-service-account
+          role-arn: ${{ secrets.VAULT_GROUPED_GOOGLE_IMPERSONATE_SERVICE_ACCOUNT_ROLE_ARN }}
+
+      - name: Get the GPM token from vault
+        uses: liquibase/build-logic/.github/actions/setup-aws-vault@2003fece51886ec69cda3df1cb4520b3ceeb2e0c # main
+        with:
+          group: liquibot-github-pat
+          role-arn: ${{ secrets.VAULT_GROUPED_LIQUIBOT_GITHUB_PAT_ROLE_ARN }}
+
+      - name: Get the Pro license key from vault
+        uses: liquibase/build-logic/.github/actions/setup-aws-vault@2003fece51886ec69cda3df1cb4520b3ceeb2e0c # main
+        with:
+          group: pro-license
+          role-arn: ${{ secrets.VAULT_GROUPED_PRO_LICENSE_ROLE_ARN }}
+
+      # setup-google-credentials reads GOOGLE_CREDENTIALS with the last role assumed; keep this one last.
+      - name: Configure AWS credentials for google-credentials
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
+          role-to-assume: ${{ secrets.VAULT_GROUPED_GOOGLE_CREDENTIALS_ROLE_ARN }}
           aws-region: us-east-1
 
-      - name: Get secrets from vault
-        id: vault-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
-        with:
-          secret-ids: |
-            ,/vault/liquibase
-          parse-json-secrets: true
-
+      # 7cb4fce masks GOOGLE_CREDENTIALS, which the grouped read no longer masks for it.
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@5ac918e7d6ab07f75e2a0a26261577f9c5df15d4 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@7cb4fceb544f2d0bebda1bc3560d316ac9c33237 # main
+        with:
+          vault-secret-id: /vault/grouped/google-credentials
 
         #look for dependencies in maven
       - name: Set up Maven settings.xml
@@ -194,22 +216,24 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Configure AWS credentials for vault access
+      - name: Get the Spacelift API key from vault
+        uses: liquibase/build-logic/.github/actions/setup-aws-vault@2003fece51886ec69cda3df1cb4520b3ceeb2e0c # main
+        with:
+          group: spacelift
+          role-arn: ${{ secrets.VAULT_GROUPED_SPACELIFT_ROLE_ARN }}
+
+      # setup-google-credentials reads GOOGLE_CREDENTIALS with the last role assumed; keep this one last.
+      - name: Configure AWS credentials for google-credentials
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
         with:
-          role-to-assume: ${{ secrets.LIQUIBASE_VAULT_OIDC_ROLE_ARN }}
+          role-to-assume: ${{ secrets.VAULT_GROUPED_GOOGLE_CREDENTIALS_ROLE_ARN }}
           aws-region: us-east-1
 
-      - name: Get secrets from vault
-        id: vault-secrets
-        uses: aws-actions/aws-secretsmanager-get-secrets@2297f9a879480a9e3af9b293ed15c70caf8e1c88 # v3.0.2
-        with:
-          secret-ids: |
-            ,/vault/liquibase
-          parse-json-secrets: true
-
+      # 7cb4fce masks GOOGLE_CREDENTIALS, which the grouped read no longer masks for it.
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@5ac918e7d6ab07f75e2a0a26261577f9c5df15d4 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@7cb4fceb544f2d0bebda1bc3560d316ac9c33237 # main
+        with:
+          vault-secret-id: /vault/grouped/google-credentials
 
       - name: Install spacectl
         uses: spacelift-io/setup-spacectl@91d4b113113fbf62f1f673ab7459a521a9766a3a # v2.6.0
