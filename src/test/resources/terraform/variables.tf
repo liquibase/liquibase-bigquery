@@ -15,3 +15,9 @@ variable "impersonate_service_account" {
   default     = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
   type        = string
 }
+
+variable "gcp_credentials_file" {
+  description = "Path of the GCP credentials file; Spacelift mounts it here"
+  default     = "/mnt/workspace/gcp.json"
+  type        = string
+}
