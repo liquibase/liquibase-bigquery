@@ -10,8 +10,9 @@ variable "deployer_sa" {
   type        = string
 }
 
-variable "impersonate_service_account" {
-  description = "Impersonate service account"
-  default     = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
+variable "gcp_credentials_file" {
+  description = "Path of the GCP credentials file; null uses the runner's GOOGLE_CREDENTIALS. Spacelift sets it to its mounted gcp.json."
+  default     = null
+  nullable    = true
   type        = string
 }

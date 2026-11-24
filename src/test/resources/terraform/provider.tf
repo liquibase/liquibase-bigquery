@@ -3,30 +3,21 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 3.0.0"
+      version = "~> 3.90"
     }
     google-beta = {
       source  = "hashicorp/google-beta"
-      version = ">= 4.0.0"
+      version = "~> 3.90"
     }
     github = {
       source  = "integrations/github"
       version = "~> 4.0"
     }
     spacelift = {
-      source = "spacelift-io/spacelift"
+      source  = "spacelift-io/spacelift"
       version = "1.27.0"
     }
   }
 }
-
-provider "google" {
-  alias                       = "impersonate_service_account"
-  project                     = "testharnesstests"
-  region                      = "us-east1"
-  impersonate_service_account = "gh-bq-deployer@testharnesstests.iam.gserviceaccount.com"
-  credentials                 = file("/mnt/workspace/gcp.json")
-}
-
 
 provider "spacelift" {}
