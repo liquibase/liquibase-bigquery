@@ -1,3 +1,4 @@
+# TECHOPS-1796 test PR: shows the harness behaviour; do not merge.
 module "bigquery" {
   source                     = "terraform-google-modules/bigquery/google"
   version                    = "~> 4.4"
