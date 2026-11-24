@@ -1,7 +1,3 @@
-locals {
-  deployer_email = "$var.deployer_sa@$project_id.iam.gserviceaccount.com"
-}
-
 module "bigquery" {
   source                     = "terraform-google-modules/bigquery/google"
   version                    = "~> 4.4"

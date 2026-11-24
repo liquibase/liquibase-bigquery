@@ -10,6 +10,7 @@ src/main/resources/liquibase.properties
 ewojtach*.json
 /src/main/resources/lolejniczakdatabricksdemo-5d5e0af44293.p12
 src/test/resources/terraform/.terraform*
+!src/test/resources/terraform/.terraform.lock.hcl
 src/test/resources/terraform/terraform*
 src/test/resources/terraform/.terraform/*
 gha-creds-*.json

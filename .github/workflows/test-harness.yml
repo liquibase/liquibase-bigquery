@@ -15,6 +15,9 @@ on:
 
 env:
   tf_version: "latest"
+  # Spacelift stack for this repo's harness. Unset skips Preview, Deploy, the tests and Destroy.
+  # liquibase-bigquery-testharness-tests builds from liquibase-pro and is shared with its harness, so don't use it here.
+  STACK_ID: ${{ vars.BIGQUERY_HARNESS_STACK_ID }}
 
 permissions:
   contents: read
@@ -92,7 +95,7 @@ jobs:
       - name: Terraform Format
         if: ${{ github.event_name == 'pull_request' }}
         id: terraform_fmt
-        run: terraform fmt
+        run: terraform fmt -check -diff
 
       - name: Terraform Init
         id: terraform_init
@@ -104,18 +107,20 @@ jobs:
         run: terraform validate -no-color
 
       - name: Preview infrastructure
+        if: ${{ vars.BIGQUERY_HARNESS_STACK_ID != '' }}
         run: |
-          spacectl stack local-preview --id liquibase-bigquery-testharness-tests > ${GITHUB_WORKSPACE}/plan.out
-          cat ${GITHUB_WORKSPACE}/plan.out
+          set -o pipefail
+          spacectl stack local-preview --id "$STACK_ID" | tee "${GITHUB_WORKSPACE}/plan.out"
 
       - name: Deploy infrastructure
-        #if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' && vars.BIGQUERY_HARNESS_STACK_ID != '' }}
         run: |
-          spacectl stack set-current-commit --id liquibase-bigquery-testharness-tests --sha ${{ github.sha }}
-          spacectl stack deploy --id liquibase-bigquery-testharness-tests --auto-confirm
+          spacectl stack set-current-commit --id "$STACK_ID" --sha "$GITHUB_SHA"
+          spacectl stack deploy --id "$STACK_ID" --auto-confirm
 
   test:
     name: Run Test Harness
+    if: ${{ vars.BIGQUERY_HARNESS_STACK_ID != '' }}
     runs-on: ubuntu-latest
     needs: [setup]
     strategy:
@@ -203,6 +208,7 @@ jobs:
         if: always()
 
   destroy:
+    if: ${{ always() && needs.setup.result == 'success' && vars.BIGQUERY_HARNESS_STACK_ID != '' }}
     runs-on: ubuntu-latest
     needs: [setup, test]
 
@@ -265,4 +271,4 @@ jobs:
       - name: Terraform Destroy
         id: terraform_destroy
         run: |
-          spacectl stack task -id liquibase-bigquery-testharness-tests -tail -- tofu destroy -auto-approve
+          spacectl stack task -id "$STACK_ID" -tail -- tofu destroy -auto-approve
