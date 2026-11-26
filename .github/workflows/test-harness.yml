@@ -59,7 +59,7 @@ jobs:
 
       # 7cb4fce masks GOOGLE_CREDENTIALS, which the grouped read no longer masks for it.
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@7cb4fceb544f2d0bebda1bc3560d316ac9c33237 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@6e9cd7ae7956e31d3381e247f25de68f306ba80c # main
         with:
           vault-secret-id: /vault/grouped/google-credentials
 
@@ -164,7 +164,7 @@ jobs:
 
       # 7cb4fce masks GOOGLE_CREDENTIALS, which the grouped read no longer masks for it.
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@7cb4fceb544f2d0bebda1bc3560d316ac9c33237 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@6e9cd7ae7956e31d3381e247f25de68f306ba80c # main
         with:
           vault-secret-id: /vault/grouped/google-credentials
 
@@ -237,7 +237,7 @@ jobs:
 
       # 7cb4fce masks GOOGLE_CREDENTIALS, which the grouped read no longer masks for it.
       - name: Setup Google credentials
-        uses: liquibase/build-logic/.github/actions/setup-google-credentials@7cb4fceb544f2d0bebda1bc3560d316ac9c33237 # main
+        uses: liquibase/build-logic/.github/actions/setup-google-credentials@6e9cd7ae7956e31d3381e247f25de68f306ba80c # main
         with:
           vault-secret-id: /vault/grouped/google-credentials
 
