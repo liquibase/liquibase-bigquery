@@ -140,6 +140,12 @@ More detailed instructions for getting started can be found
 
 ## Using the Liquibase Test Harness in BigQuery Extension
 
+### Where it runs in CI
+
+This repo runs no harness in CI; `test-harness.yml` only checks the Terraform in `src/test/resources/terraform`.
+The harness runs in liquibase-pro's `bigquery-harness.yml`, on the bigquery subtree sync PR that brings each change from `main` into liquibase-pro.
+That check isn't required in liquibase-pro and `create-release` doesn't wait for it, so a release can ship before the harness has run on its commit; check the latest sync PR's harness run before releasing.
+
 ### Configuring the project
 
 Fill in `harness-config.yml` in `src/test/resources` directory.
@@ -152,21 +158,22 @@ Build project without tests
 mvn package -DskipTests
 ```
 
-To run all harness tests for the extension run
+The harness suites are `FoundationalHarnessSuiteIT`, `ContributedHarnessSuiteIT` and `AdvancedHarnessSuiteIT` in `src/test/groovy/liquibase/ext/bigquery`.
+To run one suite
 
 ```sh
-mvn -Dit.test=LiquibaseHarnessSuiteIT verify
+mvn -Dtest=liquibase.ext.bigquery.FoundationalHarnessSuiteIT test
 ```
 
 To run only subset of tests, add `-DchangeObjects` parameter,
 with list of tests that should be included
 
 ```sh
-mvn -Dit.test=LiquibaseHarnessSuiteIT -DchangeObjects=addLookupTable verify
- ```
+mvn -Dtest=liquibase.ext.bigquery.FoundationalHarnessSuiteIT -DchangeObjects=addLookupTable test
+```
 
 ### Executing from IDE
 
-From IDE you can run `src/test/groovy/LiquibaseHarnessSuiteIT` test.
+From IDE you can run any of the suites in `src/test/groovy/liquibase/ext/bigquery`.
 You can narrow down the list of harness tests by specifying `-DchangeObjects`
 VM argument in Run Configuration.
